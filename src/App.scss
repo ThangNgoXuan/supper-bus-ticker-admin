@@ -1,1 +1,16 @@
+// Libraries
 @import "antd/dist/antd.min.css";
+
+// Setup
+@import 'styles/variables.scss';
+@import 'styles/color.scss';
+
+// Components
+@import 'src/components/Header/index.scss';
+@import 'src/components/Sider/index.scss';
+
+.App {
+    font-family: sans-serif;
+    text-align: center;
+}
+  

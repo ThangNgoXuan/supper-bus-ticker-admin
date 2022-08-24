@@ -1,0 +1,12 @@
+.sider {
+
+    &_logoTitle {
+        display: flex;
+        align-items: flex-end;
+
+        &_title {
+            color: $white !important;
+            margin: 0;
+        }
+    }
+}
