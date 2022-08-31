@@ -1,12 +1,33 @@
-.sider {
+.ant-layout-sider {
+    width: rem(256);
+}
 
-    &_logoTitle {
-        display: flex;
-        align-items: flex-end;
+.sider_logoTitle {
+    @include adjust-flex();
+    height: $height-header;
 
-        &_title {
-            color: $white !important;
-            margin: 0;
-        }
+    .ant-image-img {
+        border-radius: 50%;
+    }
+
+    .ant-typography {
+        color: $white;
+        margin: 0;
+        margin-left: rem(8);
+    }
+}
+
+.ant-menu-item {
+    vertical-align: text-bottom;
+}
+
+.ant-menu-title-content {
+    @include font-base();
+}
+
+.ant-menu-item-icon {
+    svg {
+        height: rem(20);
+        width: auto;
     }
 }

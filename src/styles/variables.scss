@@ -1,1 +1,23 @@
-$header-height: 100px;
+// fonts
+$font-lato: 'Lato', sans-serif;
+$font-roboto: 'Roboto', sans-serif;
+// transition
+$transition: 0.25s;
+$transition-medium: 0.3s;
+$transition-long: 0.4s;
+
+// z-index
+$z-header: 100;
+$z-footer: 101;
+$z-modal: 102;
+$z-modal2: 103;
+$z-modal3: 104;
+$z-1: 1;
+$z-2: 2;
+$z-arrows: 11;
+$z-loading: 999;
+$z-close: 2;
+
+// space
+$height-header: 64px;
+

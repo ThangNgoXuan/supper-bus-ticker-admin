@@ -1,8 +1,22 @@
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: $header-height;
-    background-color: blue;
+.ant-layout-header {
+    height: $height-header;
+    background-color: $white;
+    @include adjust-flex(flex-end, flex-start);
+
+    .header-account {
+        @include adjust-flex();
+        flex-direction: row-reverse;
+
+        .ant-image {
+            width: rem(50);
+            &-img {
+                border-radius: 50%;
+            }
+        }
+
+        .ant-typography {
+            margin: 0;
+            margin-right: rem(8);
+        }
+    }
 }

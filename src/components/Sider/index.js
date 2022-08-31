@@ -7,10 +7,10 @@ export default function Sider({ router }) {
   const { SubMenu, Item } = Menu;
   const { Title } = Typography;
   return (
-    <Sider className="sider">
+    <Sider>
       <div className="sider_logoTitle">
-        <Image src="https://picsum.photos/50/50" className="sider-logo" />
-        <Title level={3} className="sider_logoTitle_title">
+        <Image src="https://picsum.photos/50/50" />
+        <Title level={3}>
           Bug Ticker
         </Title>
       </div>
