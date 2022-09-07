@@ -7,36 +7,19 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import dashboardRoutes from "./routes";
 import "./App.scss";
+import Dashboard from "./pages/Dashboard";
+import Ticket from "./pages/Ticket";
+import Coach from "./pages/Coach";
+import Driver from "./pages/Driver";
+import ContactUs from "./pages/ContactUs";
+import AboutUs from "./pages/AboutUs";
+import News from "./pages/News";
+import Recruit from "./pages/Recruit";
+import Report from "./pages/Report";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   const { Content } = Layout;
-
-  const getRouter = (router) => {
-    // eslint-disable-next-line
-    return router.map((item, index) => {
-      if (item.children) {
-        item.children.map((ele, idex) => {
-          return (
-            <>
-              <Route
-                path={ele.path}
-                element={<ele.component />}
-                key={`component-${idex}`}
-              />
-            </>
-          );
-        });
-      } else {
-        return (
-          <Route
-            path={item.path}
-            element={<item.component />}
-            key={`component-${index}`}
-          />
-        );
-      }
-    });
-  };
 
   return (
     <div className="App">
@@ -45,7 +28,21 @@ export default function App() {
         <Layout>
           <Header />
           <Content>
-            <Routes>{getRouter(dashboardRoutes)}</Routes>
+            {/* <Routes>{getRouter(dashboardRoutes)}</Routes> */}
+            <Routes>
+              <Route path="/dashboard" element={<Dashboard />}/>
+              <Route path="/ticker" element={<Ticket />}/>
+              <Route path="/coach" element={<Coach />}/>
+              <Route path="/coach-type" element={<Coach />}/>
+              <Route path="/driver" element={<Driver />}/>
+              <Route path="/contact" element={<ContactUs />}/>
+              <Route path="/about" element={<AboutUs />}/>
+              <Route path="/news" element={<News />}/>
+              <Route path="/recruit" element={<Recruit />}/>
+              <Route path="/report" element={<Report />}/>
+              <Route path="*" element={<NotFound />}/>
+              <Route path="/recruit" element={<Recruit />}/>
+            </Routes>
           </Content>
           <Footer />
         </Layout>
