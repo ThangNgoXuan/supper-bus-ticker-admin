@@ -1,5 +1,7 @@
 import { Typography, Input, Button } from "antd";
 import React from "react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const titleDefault = "Về Bus-ticket chúng tôi";
 const descriptionDefault = `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
@@ -13,7 +15,6 @@ cac`;
 export default function AboutUs() {
   const { Title } = Typography;
 
-
   return (
     <div className="p-aboutUs">
       <div className="p-aboutUs_form_field">
@@ -22,10 +23,27 @@ export default function AboutUs() {
       </div>
       <div className="p-aboutUs_form_description">
         <Title level={3}>Nội dung</Title>
-        <Input placeholder="Vui lòng nhập nội dung" value={descriptionDefault} />
+        <CKEditor
+          editor={ClassicEditor}
+          data={descriptionDefault}
+          onReady={(editor) => {
+            // You can store the "editor" and use when it is needed.
+            console.log("Editor is ready to use!", editor);
+          }}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            console.log({ event, editor, data });
+          }}
+          onBlur={(event, editor) => {
+            console.log("Blur.", editor);
+          }}
+          onFocus={(event, editor) => {
+            console.log("Focus.", editor);
+          }}
+        />
       </div>
       <div className="p-aboutUs_form_button">
-        <Button type="primary">Cập nhật</Button>
+        <Button size="large" type="primary">Cập nhật</Button>
       </div>
     </div>
   );

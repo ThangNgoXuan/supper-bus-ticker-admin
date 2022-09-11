@@ -1,0 +1,27 @@
+.p-contactUs {
+    &_form {
+        &_field {
+            margin-bottom: rem(20);
+
+            .ant-typography {
+                text-align: left;
+            }
+
+            &-content {
+                margin-top: rem(8);
+            }
+        }
+
+        &_description {
+            margin-bottom: rem(20);
+
+            .ant-typography {
+                text-align: left;
+            }
+        }
+
+        &_button {
+            @include adjust-flex(flex-end, center);
+        }
+    }
+}

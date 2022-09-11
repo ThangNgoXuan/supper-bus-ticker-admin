@@ -2,6 +2,8 @@ import { Button, DatePicker, Input, Modal, Table, Typography } from "antd";
 import React, { useState } from "react";
 import moment from "moment";
 import { dateFormat } from "../../utils";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 export default function Recruit() {
   const columns = [
@@ -46,8 +48,8 @@ export default function Recruit() {
 
   const listData = new Array(30).fill({
     key: 1,
-    name: `Frotent`,
-    salary: `15.000 VNĐ`,
+    name: `Frontent`,
+    salary: `15.000.000`,
     dule: "30/09/2022",
     total: 30,
     description:
@@ -55,7 +57,6 @@ export default function Recruit() {
   });
 
   const { Title } = Typography;
-  const { TextArea } = Input;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // HandleDelete
@@ -128,13 +129,16 @@ export default function Recruit() {
           <div className="p-recruit_modal_field">
             <div className="p-recruit_modal_field-input">
               <Title level={5}>Ngày hết hạn</Title>
-              <DatePicker defaultValue={moment('09/09/2022', dateFormat)} format={dateFormat}  />
+              <DatePicker
+                defaultValue={moment("09/09/2022", dateFormat)}
+                format={dateFormat}
+              />
             </div>
           </div>
           <div className="p-recruit_modal_field">
             <div className="p-recruit_modal_field-textarea">
               <Title level={5}>Mô tả công việc</Title>
-              <TextArea rows={6} placeholder="Nhập mô tả công việc   (*)" />
+              <CKEditor editor={ClassicEditor} />
             </div>
           </div>
         </Modal>

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Button, DatePicker, Input, Modal, Table, Typography } from "antd";
 import moment from "moment";
 import { dateFormat } from "../../utils";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 
 export default function News() {
   const columns = [
@@ -46,7 +49,6 @@ export default function News() {
   });
 
   const { Title } = Typography;
-  const { TextArea } = Input;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // HandleDelete
@@ -124,7 +126,9 @@ export default function News() {
           <div className="p-news_modal_field">
             <div className="p-news_modal_field-textarea">
               <Title level={5}>Nội dung bài viết (*)</Title>
-              <TextArea rows={6} placeholder="Nhập nội dung bài viết" />
+              <CKEditor 
+                editor={ClassicEditor}
+              />
             </div>
           </div>
         </Modal>

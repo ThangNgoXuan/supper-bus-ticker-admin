@@ -19,6 +19,10 @@
 
 .ant-menu-item {
     vertical-align: text-bottom;
+    svg {
+        height: rem(20);
+        width: auto;
+    }
 }
 
 .ant-menu-title-content {

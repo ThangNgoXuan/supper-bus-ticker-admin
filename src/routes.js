@@ -7,6 +7,10 @@ import {
 } from "@ant-design/icons";
 
 import { IoTicketOutline } from "react-icons/io5";
+import { RiContactsBook2Line } from "react-icons/ri";
+import { AiOutlineInfoCircle, AiOutlineUser } from "react-icons/ai";
+import { BiNews } from "react-icons/bi";
+import { GiMassDriver } from "react-icons/gi";
 
 const dashboardRoutes = [
   {
@@ -33,17 +37,17 @@ const dashboardRoutes = [
   {
     path: "/driver",
     name: "Quản lí tài xế",
-    icon: <HomeOutlined />,
+    icon: <GiMassDriver />,
   },
   {
     path: "/user",
     name: "Quản lí người dùng",
-    icon: <HomeOutlined />,
+    icon: <AiOutlineUser />,
   },
   {
     path: "/news",
     name: "Tin tức",
-    icon: <HomeOutlined />,
+    icon: <BiNews />,
   },
   {
     path: "/recruit",
@@ -51,19 +55,19 @@ const dashboardRoutes = [
     icon: <ReconciliationOutlined />,
   },
   {
-    path: "/report",
-    name: "Báo cáo",
-    icon: <PieChartOutlined />,
-  },
-  {
     path: "/contact",
     name: "Liên hệ",
-    icon: <HomeOutlined />,
+    icon: <RiContactsBook2Line />,
   },
   {
     path: "/about",
     name: "Về chúng tôi",
-    icon: <HomeOutlined />,
+    icon: <AiOutlineInfoCircle />,
+  },
+  {
+    path: "/report",
+    name: "Báo cáo",
+    icon: <PieChartOutlined />,
   },
 ];
 

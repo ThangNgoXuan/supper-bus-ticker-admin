@@ -1,0 +1,23 @@
+.p-aboutUs {
+    &_form {
+        &_field {
+            margin-bottom: rem(20);
+
+            .ant-typography {
+                text-align: left;
+            }
+        }
+
+        &_description {
+            margin-bottom: rem(20);
+
+            .ant-typography {
+                text-align: left;
+            }
+        }
+
+        &_button {
+            @include adjust-flex(flex-end, center);
+        }
+    }
+}
