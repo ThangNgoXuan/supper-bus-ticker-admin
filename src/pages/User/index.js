@@ -1,4 +1,4 @@
-import { Table, Typography } from "antd";
+import { Button, Table, Typography } from "antd";
 import React from "react";
 
 export default function User() {
@@ -30,22 +30,32 @@ export default function User() {
       dataIndex: "receip",
       key: "receip",
     },
-  ]
+    {
+      dataIndex: "function",
+      key: "function",
+      render: () => (
+        <div className="p-news_table_button">
+          <Button type="primary">Xóa</Button>
+          <Button type="primary">Cập nhật</Button>
+        </div>
+      ),
+    },
+  ];
 
   const data = new Array(30).fill({
-    id: '10',
-    name: 'Ngô Xuân Thang',
-    email: 'thangnx.it@gmail.com',
-    phone: '0337930954',
-    receip: ['123', '345'],
-  })
+    id: "10",
+    name: "Ngô Xuân Thang",
+    email: "thangnx.it@gmail.com",
+    phone: "0337930954",
+    receip: ["123", "345"],
+  });
 
   return (
     <div className="p-user">
       <div className="p-user_title">
         <Title level={2}>Quản lí người dùng</Title>
       </div>
-      <Table columns={columns} dataSource={data}/>
+      <Table columns={columns} dataSource={data} />
     </div>
   );
 }

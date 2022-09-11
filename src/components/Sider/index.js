@@ -10,9 +10,7 @@ export default function Sider({ router }) {
     <Sider>
       <div className="sider_logoTitle">
         <Image src="https://picsum.photos/50/50" />
-        <Title level={3}>
-          Bug Ticker
-        </Title>
+        <Title level={3}>Bug Ticker</Title>
       </div>
       <Menu mode="inline" theme="dark">
         {router.map(

@@ -9,7 +9,7 @@ import {
 import { IoTicketOutline } from "react-icons/io5";
 import { RiContactsBook2Line } from "react-icons/ri";
 import { AiOutlineInfoCircle, AiOutlineUser } from "react-icons/ai";
-import { BiNews } from "react-icons/bi";
+import { BiNews, BiBorderOuter } from "react-icons/bi";
 import { GiMassDriver } from "react-icons/gi";
 
 const dashboardRoutes = [
@@ -30,6 +30,17 @@ const dashboardRoutes = [
       {
         path: "/coach",
         name: "Quản lí loại xe",
+        icon: <CaretRightOutlined />,
+      },
+    ],
+  },
+  {
+    name: "Quản lí chuyến xe",
+    icon: <BiBorderOuter />,
+    children: [
+      {
+        path: "/route",
+        name: "Quản lí chuyến xe",
         icon: <CaretRightOutlined />,
       },
     ],

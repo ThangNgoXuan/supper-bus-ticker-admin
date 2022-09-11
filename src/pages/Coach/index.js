@@ -25,6 +25,16 @@ export default function Coach() {
       dataIndex: "position",
       key: "position",
     },
+    {
+      dataIndex: "function",
+      key: "function",
+      render: () => (
+        <div className="p-news_table_button">
+          <Button type="primary">Xóa</Button>
+          <Button type="primary">Cập nhật</Button>
+        </div>
+      ),
+    },
   ];
 
   const columnsTypeCoach = [

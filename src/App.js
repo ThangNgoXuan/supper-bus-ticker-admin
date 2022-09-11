@@ -18,6 +18,7 @@ import Recruit from "./pages/Recruit";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import User from "./pages/User";
+import RoutesPage from "./pages/Routes";
 
 export default function App() {
   const { Content } = Layout;
@@ -40,9 +41,10 @@ export default function App() {
               <Route exact path="/news" element={<News />}/>
               <Route exact path="/recruit" element={<Recruit />}/>
               <Route exact path="/report" element={<Report />}/>
-              <Route path="*" element={<NotFound />}/>
+              <Route path="/*" element={<NotFound />}/>
               <Route exact path="/recruit" element={<Recruit />}/>
               <Route exact path="/user" element={<User />}/>
+              <Route exact path="/route" element={<RoutesPage />}/>
             </Routes>
           </Content>
           <Footer />

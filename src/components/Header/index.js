@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <Header>
         <div className='header-account'>
-          <Image src={account.img}/>
+          <Image preview={false} src={account.img}/>
           <Title level={5}>{account.name}</Title>
         </div>
     </Header>
