@@ -17,6 +17,7 @@ import News from "./pages/News";
 import Recruit from "./pages/Recruit";
 import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
+import User from "./pages/User";
 
 export default function App() {
   const { Content } = Layout;
@@ -28,20 +29,20 @@ export default function App() {
         <Layout>
           <Header />
           <Content>
-            {/* <Routes>{getRouter(dashboardRoutes)}</Routes> */}
             <Routes>
-              <Route path="/dashboard" element={<Dashboard />}/>
-              <Route path="/ticker" element={<Ticket />}/>
-              <Route path="/coach" element={<Coach />}/>
-              <Route path="/coach-type" element={<Coach />}/>
-              <Route path="/driver" element={<Driver />}/>
-              <Route path="/contact" element={<ContactUs />}/>
-              <Route path="/about" element={<AboutUs />}/>
-              <Route path="/news" element={<News />}/>
-              <Route path="/recruit" element={<Recruit />}/>
-              <Route path="/report" element={<Report />}/>
+              <Route exact path="/" element={<Dashboard />}/>
+              <Route exact path="/ticker" element={<Ticket />}/>
+              <Route exact path="/coach" element={<Coach />}/>
+              <Route exact path="/coach-type" element={<Coach />}/>
+              <Route exact path="/driver" element={<Driver />}/>
+              <Route exact path="/contact" element={<ContactUs />}/>
+              <Route exact path="/about" element={<AboutUs />}/>
+              <Route exact path="/news" element={<News />}/>
+              <Route exact path="/recruit" element={<Recruit />}/>
+              <Route exact path="/report" element={<Report />}/>
               <Route path="*" element={<NotFound />}/>
-              <Route path="/recruit" element={<Recruit />}/>
+              <Route exact path="/recruit" element={<Recruit />}/>
+              <Route exact path="/user" element={<User />}/>
             </Routes>
           </Content>
           <Footer />

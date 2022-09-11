@@ -2,19 +2,32 @@
 @import "antd/dist/antd.min.css";
 
 // Setup
-@import 'styles/common.scss';
+@import './styles/common.scss';
 
 
 // Components
-@import 'src/components/Header/index.scss';
-@import 'src/components/Sider/index.scss';
-@import 'src/components/Footer/index.scss';
+@import './components/Header/index.scss';
+@import './components/Sider/index.scss';
+@import './components/Footer/index.scss';
+
+
+// Page
+@import 'src/pages/AboutUs/index.scss';
+@import './pages/Coach/index.scss';
+@import './pages/ContactUs/index.scss';
+@import './pages/Dashboard/index.scss';
+@import './pages/Driver/index.scss';
+@import './pages/News/index.scss';
+@import './pages/NotFound/index.scss';
+@import './pages/Recruit/index.scss';
+@import './pages/Report/index.scss';
+@import './pages/Ticket/index.scss';
 
 .App {
     font-family: sans-serif;
     text-align: center;
 }
-  
+
 
 .ant-layout-content {
     background-color: $isabelline;

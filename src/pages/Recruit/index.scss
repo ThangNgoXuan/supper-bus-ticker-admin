@@ -1,0 +1,54 @@
+.p-recruit {
+  padding: rem(20) 0;
+  &_title {
+    @include adjust-flex(space-between, flex-end);
+    margin-bottom: rem(20);
+
+    .ant-typography {
+      margin-bottom: 0;
+    }
+  }
+
+  &_table {
+    &_button {
+      .ant-btn {
+        margin-right: rem(8);
+        margin-top: rem(4);
+        margin-bottom: rem(4);
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  &_modal {
+    .ant-modal {
+      width: 50%;
+    }
+
+    &_field {
+      display: flex;
+      margin-top: rem(12);
+
+      &-input {
+        padding: 0 rem(10);
+        width: 100%;
+        max-width: 60%;
+        flex: 0 0 60%;
+
+        &:last-child {
+          width: 100%;
+          max-width: 40%;
+          flex: 0 0 40%;
+        }
+      }
+
+      &-textarea {
+        width: 100%;
+        padding: 0 rem(10);
+      }
+    }
+  }
+}

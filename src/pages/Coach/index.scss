@@ -1,0 +1,25 @@
+.p-coach {
+    &_titleWrap {
+        display: flex;
+    }
+
+    &_typeCoach {
+        width: 100%;
+        max-width: 50%;
+        flex: 0 0 50%;
+
+        &_header {
+            @include adjust-flex(space-between, center);
+            margin-bottom: rem(8);
+        }
+    }
+
+    &_typeFilter {
+        padding-bottom: rem(20);
+        width: 100%;
+        max-width: 50%;
+        flex: 0 0 50%;
+        @include adjust-flex(flex-end, flex-start);
+        flex-direction: column;
+    }
+}

@@ -6,16 +6,18 @@ import {
   CaretRightOutlined,
 } from "@ant-design/icons";
 
+import { IoTicketOutline } from "react-icons/io5";
+
 const dashboardRoutes = [
   {
-    path: "/dashboard",
+    path: "/",
     name: "Dashboard",
     icon: <HomeOutlined />,
   },
   {
     path: "/ticker",
-    name: "Quản lí bán vé",
-    icon: <HomeOutlined />,
+    name: "Quản lí vé xe",
+    icon: <IoTicketOutline />,
   },
   {
     name: "Quản lí xe",
@@ -25,7 +27,7 @@ const dashboardRoutes = [
         path: "/coach",
         name: "Quản lí loại xe",
         icon: <CaretRightOutlined />,
-      }
+      },
     ],
   },
   {
@@ -34,13 +36,8 @@ const dashboardRoutes = [
     icon: <HomeOutlined />,
   },
   {
-    path: "/contact",
-    name: "Liên hệ",
-    icon: <HomeOutlined />,
-  },
-  {
-    path: "/about",
-    name: "Về chúng tôi",
+    path: "/user",
+    name: "Quản lí người dùng",
     icon: <HomeOutlined />,
   },
   {
@@ -57,6 +54,16 @@ const dashboardRoutes = [
     path: "/report",
     name: "Báo cáo",
     icon: <PieChartOutlined />,
+  },
+  {
+    path: "/contact",
+    name: "Liên hệ",
+    icon: <HomeOutlined />,
+  },
+  {
+    path: "/about",
+    name: "Về chúng tôi",
+    icon: <HomeOutlined />,
   },
 ];
 
