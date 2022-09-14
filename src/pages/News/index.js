@@ -52,6 +52,7 @@ export default function News() {
     },
   ];
 
+
   const listData = new Array(30).fill({
     id: 1,
     title: `Bài viết một`,
@@ -59,6 +60,7 @@ export default function News() {
     content:
       "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
   });
+
 
   const { Title } = Typography;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -140,6 +142,7 @@ export default function News() {
           dataSource={listData}
           pagination={tableParams.pagination}
           handleTableChange={handleTableChange}
+          onChange={e => console.log(e.current)}
         />
       </div>
       <div className="p-news_modal">

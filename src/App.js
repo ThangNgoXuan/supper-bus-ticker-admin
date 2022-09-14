@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import User from "./pages/User";
 import RoutesPage from "./pages/Routes";
 import Login from "./pages/Login";
+import Place from "./pages/Place";
 
 export default function App() {
   const { Content } = Layout;
@@ -47,6 +48,7 @@ export default function App() {
               <Route exact path="/user" element={<User />}/>
               <Route exact path="/route" element={<RoutesPage />}/>
               <Route exact path="/" element={<Login />}/>
+              <Route exact path="/place" element={<Place />}/>
             </Routes>
           </Content>
           <Footer />

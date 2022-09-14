@@ -1,4 +1,4 @@
-import { Button, Table, Typography } from "antd";
+import { Button, notification, Table, Typography } from "antd";
 import React from "react";
 
 export default function Driver() {
@@ -25,12 +25,18 @@ export default function Driver() {
       key: "function",
       render: () => (
         <div className="p-news_table_button">
-          <Button type="primary">Xóa</Button>
+          <Button onClick={handleDelete} type="primary">Xóa</Button>
           <Button type="primary">Cập nhật</Button>
         </div>
       ),
     },
   ];
+
+  const handleDelete = () => {
+    notification.open({
+      message: 'Xóa thành công'
+    })
+  }
 
   const dataTableTicket = new Array(30).fill({
     id: "1",

@@ -1,4 +1,4 @@
-import { Button, Table, Typography } from "antd";
+import { Button, notification, Table, Typography } from "antd";
 import React from "react";
 
 export default function User() {
@@ -35,12 +35,18 @@ export default function User() {
       key: "function",
       render: () => (
         <div className="p-news_table_button">
-          <Button type="primary">Xóa</Button>
+          <Button type="primary" onClick={handleDelete}>Xóa</Button>
           <Button type="primary">Cập nhật</Button>
         </div>
       ),
     },
   ];
+
+  const handleDelete = () => {
+    notification.open({
+      message: 'Xóa thành công'
+    })
+  }
 
   const data = new Array(30).fill({
     id: "10",
