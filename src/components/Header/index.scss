@@ -6,6 +6,7 @@
     .header-account {
         @include adjust-flex();
         flex-direction: row-reverse;
+        cursor: pointer;
 
         .ant-image {
             width: rem(40);

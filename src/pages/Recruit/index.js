@@ -1,4 +1,12 @@
-import { Button, DatePicker, Input, Modal, Table, Typography } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Table,
+  Typography,
+} from "antd";
 import React, { useState } from "react";
 import moment from "moment";
 import { dateFormat } from "../../utils";
@@ -6,6 +14,8 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 export default function Recruit() {
+  const { Title } = Typography;
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const columns = [
     {
       title: "Tên công việc",
@@ -46,6 +56,7 @@ export default function Recruit() {
     },
   ];
 
+  // Get data
   const listData = new Array(30).fill({
     key: 1,
     name: `Frontent`,
@@ -55,9 +66,6 @@ export default function Recruit() {
     description:
       "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
   });
-
-  const { Title } = Typography;
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // HandleDelete
   const handleDelete = () => {};
@@ -83,12 +91,12 @@ export default function Recruit() {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
+  const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  const onFinish = (data) => {
+    console.log(data);
   };
 
   return (
@@ -111,36 +119,81 @@ export default function Recruit() {
         <Modal
           title="Thêm công việc mới"
           visible={isModalOpen}
-          onOk={handleOk}
           onCancel={handleCancel}
-          okText="Tạo"
-          cancelText="Hủy"
+          footer={[
+            <>
+            <Button onClick={handleCancel}>Hủy</Button>
+            <Button form="formRecruit" htmlType="submit">
+              Tạo
+            </Button>
+            </>
+          ]}
         >
-          <div className="p-recruit_modal_field">
-            <div className="p-recruit_modal_field-input">
-              <Title level={5}>Tên việc làm</Title>
-              <Input placeholder="Nhập tên việc làm (*)" />
+          <Form id="formRecruit" onFinish={onFinish}>
+            <div className="p-recruit_modal_field">
+              <div className="p-recruit_modal_field-input">
+                <Title level={5}>Tên việc làm</Title>
+                <Form.Item name="name">
+                  <Input
+                    placeholder="Nhập tên việc làm (*)"
+                    rules={[{
+                      require: true,
+                      message: 'Vui lòng tên việc làm'
+                    }]}
+                  />
+                </Form.Item>
+              </div>
+              <div className="p-recruit_modal_field-input">
+                <Title level={5}>Lương</Title>
+                <Form.Item
+                  name="salary"
+                  rules={[{
+                    require: true,
+                    message: 'Vui lòng nhập số tiền lương'
+                  }]}
+                >
+                  <Input placeholder="Nhập lương (*)" type="number"/>
+                </Form.Item>
+              </div>
             </div>
-            <div className="p-recruit_modal_field-input">
-              <Title level={5}>Lương</Title>
-              <Input placeholder="Nhập lương (*)" />
+            <div className="p-recruit_modal_field">
+              <div className="p-recruit_modal_field-input">
+                <Title level={5}>Ngày hết hạn</Title>
+                <Form.Item
+                  name="date"
+                  rules={[{
+                    require: true,
+                    message: 'Vui lòng nhập ngày hết hạn'
+                  }]}
+                >
+                  <DatePicker
+                    defaultValue={moment("09/09/2022", dateFormat)}
+                    format={dateFormat}
+                  />
+                </Form.Item>
+              </div>
             </div>
-          </div>
-          <div className="p-recruit_modal_field">
-            <div className="p-recruit_modal_field-input">
-              <Title level={5}>Ngày hết hạn</Title>
-              <DatePicker
-                defaultValue={moment("09/09/2022", dateFormat)}
-                format={dateFormat}
-              />
+            <div className="p-recruit_modal_field">
+              <div className="p-recruit_modal_field-textarea">
+                <Title level={5}>Mô tả công việc</Title>
+                <Form.Item
+                  name="content"
+                  rules={[{
+                    require: true,
+                    message: 'Vui lòng nhập nội dung công việc'
+                  }]}
+                  valuePropName="data"
+                  initialValue="{descriptionDefault}"
+                  getValueFromEvent={(even, editor) => {
+                    const data = editor.getData();
+                    return data;
+                  }}
+                >
+                  <CKEditor editor={ClassicEditor} />
+                </Form.Item>
+              </div>
             </div>
-          </div>
-          <div className="p-recruit_modal_field">
-            <div className="p-recruit_modal_field-textarea">
-              <Title level={5}>Mô tả công việc</Title>
-              <CKEditor editor={ClassicEditor} />
-            </div>
-          </div>
+          </Form>
         </Modal>
       </div>
     </div>

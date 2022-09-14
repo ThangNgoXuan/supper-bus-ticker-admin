@@ -19,6 +19,7 @@ import Report from "./pages/Report";
 import NotFound from "./pages/NotFound";
 import User from "./pages/User";
 import RoutesPage from "./pages/Routes";
+import Login from "./pages/Login";
 
 export default function App() {
   const { Content } = Layout;
@@ -31,7 +32,7 @@ export default function App() {
           <Header />
           <Content>
             <Routes>
-              <Route exact path="/" element={<Dashboard />}/>
+              <Route exact path="/dashboard" element={<Dashboard />}/>
               <Route exact path="/ticker" element={<Ticket />}/>
               <Route exact path="/coach" element={<Coach />}/>
               <Route exact path="/coach-type" element={<Coach />}/>
@@ -45,6 +46,7 @@ export default function App() {
               <Route exact path="/recruit" element={<Recruit />}/>
               <Route exact path="/user" element={<User />}/>
               <Route exact path="/route" element={<RoutesPage />}/>
+              <Route exact path="/" element={<Login />}/>
             </Routes>
           </Content>
           <Footer />

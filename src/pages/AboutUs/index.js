@@ -1,4 +1,4 @@
-import { Typography, Input, Button } from "antd";
+import { Typography, Input, Button, Form } from "antd";
 import React from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -15,36 +15,56 @@ cac`;
 export default function AboutUs() {
   const { Title } = Typography;
 
+  const onFinish = (data) => {
+    console.log(data);
+  };
+
   return (
     <div className="p-aboutUs">
-      <div className="p-aboutUs_form_field">
-        <Title level={2}>Tiêu đề</Title>
-        <Input placeholder="Vui lòng nhập tiêu đề" value={titleDefault} />
-      </div>
-      <div className="p-aboutUs_form_description">
-        <Title level={3}>Nội dung</Title>
-        <CKEditor
-          editor={ClassicEditor}
-          data={descriptionDefault}
-          onReady={(editor) => {
-            // You can store the "editor" and use when it is needed.
-            console.log("Editor is ready to use!", editor);
-          }}
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            console.log({ event, editor, data });
-          }}
-          onBlur={(event, editor) => {
-            console.log("Blur.", editor);
-          }}
-          onFocus={(event, editor) => {
-            console.log("Focus.", editor);
-          }}
-        />
-      </div>
-      <div className="p-aboutUs_form_button">
-        <Button size="large" type="primary">Cập nhật</Button>
-      </div>
+      <Form onFinish={onFinish}>
+        <div className="p-aboutUs_form_field">
+          <Title level={2}>Tiêu đề</Title>
+          <Form.Item
+            name="title"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập tiêu đề",
+              },
+            ]}
+          >
+            <Input
+              placeholder="Vui lòng nhập tiêu đề"
+              defaultValue={titleDefault}
+            />
+          </Form.Item>
+        </div>
+        <div className="p-aboutUs_form_description">
+          <Title level={3}>Nội dung</Title>
+          <Form.Item
+            name="content"
+            rules={[
+              {
+                require: true,
+                message: "Vui lòng nhập nội dung!",
+              },
+            ]}
+            valuePropName="data"
+            initialValue={descriptionDefault}
+            getValueFromEvent={(even, editor) => {
+              const data = editor.getData();
+              return data;
+            }}
+          >
+            <CKEditor editor={ClassicEditor} />
+          </Form.Item>
+        </div>
+        <div className="p-aboutUs_form_button">
+          <Button size="large" type="primary" htmlType="submit">
+            Cập nhật
+          </Button>
+        </div>
+      </Form>
     </div>
   );
 }

@@ -14,7 +14,7 @@ import { GiMassDriver } from "react-icons/gi";
 
 const dashboardRoutes = [
   {
-    path: "/",
+    path: "/dashboard",
     name: "Dashboard",
     icon: <HomeOutlined />,
   },

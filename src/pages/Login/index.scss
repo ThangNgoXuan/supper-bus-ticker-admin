@@ -1,0 +1,21 @@
+.p-login {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    &_left {
+        @include adjust-flex(center, center);
+        width: 100%;
+        max-width: 50%;
+        flex: 0 0 50%;
+    }
+
+    &_right {
+        width: 100%;
+        max-width: 50%;
+        flex: 0 0 50%;
+        @include adjust-flex(center, center);
+        background-color: $white;
+        flex-direction: column;
+    }
+}
