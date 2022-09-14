@@ -1,4 +1,4 @@
-import { Button, Form, Input, Typography } from "antd";
+import { Button, Form, Input, notification, Typography } from "antd";
 import React from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -8,6 +8,9 @@ export default function ContactUs() {
 
   const onFinish = (data) => {
     console.log(data);
+    notification.open({
+      message: "Cập nhật thành công",
+    })
   };
 
   return (

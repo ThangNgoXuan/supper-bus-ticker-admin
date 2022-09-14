@@ -35,9 +35,9 @@ export default function Header() {
     <Header>
       <Dropdown overlay={menu}>
           <div className="header-account">
-            <Image preview={false} src={account.img} />
             <DownOutlined />
             <Title level={5}>{account.name}</Title>
+            <Image preview={false} src={account.img} />
           </div>
       </Dropdown>
     </Header>

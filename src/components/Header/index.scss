@@ -9,15 +9,14 @@
         cursor: pointer;
 
         .ant-image {
-            width: rem(40);
+            width: rem(32);
             &-img {
                 border-radius: 50%;
             }
         }
 
         .ant-typography {
-            margin: 0;
-            margin-right: rem(8);
+            margin: 0 rem(8);
         }
     }
 }
