@@ -96,8 +96,8 @@ export default function Schedule() {
               <div className="p-schedule_content_div">
                 {item.list && (
                   <>
-                    <Table columns={columns} dataSource={item.list} />
-                    <Button>Cập nhật</Button>
+                  <Table columns={columns} dataSource={item.list} />
+                  <Button>Cập nhật</Button>
                   </>
                 )}
               </div>

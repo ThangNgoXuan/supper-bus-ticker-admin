@@ -1,0 +1,5 @@
+.p-booking {
+    &_filter {
+        @include adjust-flex(space-between, flex-end);
+    }
+}

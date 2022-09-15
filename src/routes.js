@@ -8,11 +8,15 @@ import {
 
 import { IoTicketOutline } from "react-icons/io5";
 import { RiContactsBook2Line } from "react-icons/ri";
-import { AiOutlineInfoCircle, AiOutlineUser, AiOutlineSchedule } from "react-icons/ai";
+import {
+  AiOutlineInfoCircle,
+  AiOutlineUser,
+  AiOutlineSchedule,
+} from "react-icons/ai";
 import { BiNews } from "react-icons/bi";
 import { GiMassDriver } from "react-icons/gi";
-import {MdOutlinePlace} from 'react-icons/md';
-import {TbRouter} from 'react-icons/tb';
+import { MdOutlinePlace, MdOutlineBorderColor } from "react-icons/md";
+import { TbRouter } from "react-icons/tb";
 
 const dashboardRoutes = [
   {
@@ -30,19 +34,9 @@ const dashboardRoutes = [
         icon: <IoTicketOutline />,
       },
       {
-        path: "/route",
-        name: "Tuyến vận chuyển",
-        icon: <TbRouter />,
-      },
-      {
-        path: "/coach",
-        name: "Quản lí loại xe",
-        icon: <UnorderedListOutlined />,
-      },
-      {
-        path: "/schedule",
-        name: "Lịch chạy",
-        icon: <AiOutlineSchedule />,
+        path: "/booking",
+        name: "Đặt vé",
+        icon: <MdOutlineBorderColor />,
       },
     ],
   },
@@ -101,11 +95,6 @@ const dashboardRoutes = [
     path: "/about",
     name: "Về chúng tôi",
     icon: <AiOutlineInfoCircle />,
-  },
-  {
-    path: "/report",
-    name: "Báo cáo",
-    icon: <PieChartOutlined />,
   },
 ];
 
