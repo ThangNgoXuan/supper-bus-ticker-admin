@@ -22,6 +22,8 @@ import Login from "./pages/Login";
 import Place from "./pages/Place";
 import Schedule from "./pages/Schedule";
 import Booking from "./pages/Booking";
+import Schema from "./pages/Schema";
+import TypeCoach from "./pages/TypeCoach";
 
 export default function App() {
   const { Content } = Layout;
@@ -51,6 +53,8 @@ export default function App() {
               <Route exact path="/" element={<Login />} />
               <Route exact path="/schedule" element={<Schedule />} />
               <Route exact path="/booking" element={<Booking />} />
+              <Route exact path="/schema" element={<Schema />} />
+              <Route exact path="/type-coach" element={<TypeCoach />} />
             </Routes>
           </Content>
           <Footer />

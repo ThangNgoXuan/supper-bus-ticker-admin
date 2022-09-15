@@ -2,7 +2,6 @@ import {
   HomeOutlined,
   ReconciliationOutlined,
   CarOutlined,
-  PieChartOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
 
@@ -41,7 +40,28 @@ const dashboardRoutes = [
     ],
   },
   {
-    name: "Quản lí xe",
+    name: "Xe",
+    icon: <CarOutlined />,
+    children: [
+      {
+        path: "/schema",
+        name: "Quản lí sơ đồ xe",
+        icon: <UnorderedListOutlined />,
+      },
+      {
+        path: "/coach",
+        name: "Quản lí xe",
+        icon: <UnorderedListOutlined />,
+      },
+      {
+        path: "/type-coach",
+        name: "Quản lí loại xe",
+        icon: <UnorderedListOutlined />,
+      },
+    ],
+  },
+  {
+    name: "Tuyến",
     icon: <CarOutlined />,
     children: [
       {
@@ -53,11 +73,6 @@ const dashboardRoutes = [
         path: "/route",
         name: "Tuyến vận chuyển",
         icon: <TbRouter />,
-      },
-      {
-        path: "/coach",
-        name: "Quản lí loại xe",
-        icon: <UnorderedListOutlined />,
       },
       {
         path: "/schedule",
