@@ -1,6 +1,15 @@
-import { Table, Typography, Button, DatePicker } from "antd";
+import {
+  Table,
+  Typography,
+  Button,
+  DatePicker,
+  Modal,
+  Form,
+  Input,
+  notification,
+} from "antd";
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
 import { dateFormat } from "../../utils";
 
 export default function Coach() {
@@ -16,9 +25,9 @@ export default function Coach() {
       key: "name",
     },
     {
-      title: "Trạng thái xe",
-      dataIndex: "status",
-      key: "status",
+      title: "Tuyến vận chuyển",
+      dataIndex: "schedule",
+      key: "schedule",
     },
     {
       title: "Vị trí xe",
@@ -59,27 +68,50 @@ export default function Coach() {
       key: "function",
       render: () => (
         <div className="p-recruit_table_button">
-          <Button type="primary">Xóa</Button>
+          <Button type="primary" onClick={handleDeleteType}>
+            Xóa
+          </Button>
           <Button type="primary">Cập nhật</Button>
         </div>
       ),
     },
   ];
+  const listCoachType = new Array(3).fill({
+    id: "1",
+    name: "Xe 36 chỗ",
+    schema: "sơ đồ 1",
+  });
 
-const listCoachType = new Array(3).fill({
-  id: '1',
-  name: 'Xe 36 chỗ',
-  schema: 'sơ đồ 1'
-})
-
-const listCoach = new Array(3).fill({
-  id: '24.359',
-  name: 'Xe giường năm',
-  status: 'Bận',
-  position: 'Vị trí 1',
-})
+  const listCoach = new Array(3).fill({
+    id: "24.359",
+    name: "Xe giường năm",
+    schedule: "Sài gòn -> đà nẵng",
+    position: "Vị trí 1",
+  });
   const { Title } = Typography;
+  const [open, setOpen] = useState(false);
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const onFinish = (data) => {
+    console.log(data);
+    notification.open({
+      message: "Tạo thành công",
+    });
+    handleClose();
+  };
+
+  const handleDeleteType = () => {
+    notification.open({
+      message: "Xóa thành công",
+    });
+  };
   return (
     <div className="p-coach">
       <Title level={2}>Quản lí xe</Title>
@@ -93,21 +125,42 @@ const listCoach = new Array(3).fill({
         </div>
         <div className="p-coach_typeCoach">
           <div className="p-coach_typeCoach_header">
-          <Title level={5}>Loại xe</Title>
-          <Button type="primary">Tạo mới</Button>
+            <Title level={5}>Loại xe</Title>
+            <Button type="primary" onClick={handleOpen}>
+              Tạo mới
+            </Button>
           </div>
-          <Table
-            columns={columnsTypeCoach}
-            dataSource={listCoachType}
-          ></Table>
+          <Table columns={columnsTypeCoach} dataSource={listCoachType}></Table>
         </div>
       </div>
 
       <div className="p-coach_tableDetail">
-        <Table
-          dataSource={listCoach}
-          columns={columns}
-        />
+        <Table dataSource={listCoach} columns={columns} />
+      </div>
+
+      <div className="p-coach_modalTypeCoach">
+        <Modal
+          title="Tọa loại xe mới"
+          visible={open}
+          onCancel={handleClose}
+          footer={[
+            <>
+              <Button onClick={handleClose}>Hủy</Button>
+              <Button htmlType="submit" form="formTypeCoach">
+                Tạo
+              </Button>
+            </>,
+          ]}
+        >
+          <Form onFinish={onFinish} id="formTypeCoach" layout="vertical">
+            <Form.Item label="Loại xe" name="name">
+              <Input placeholder="Nhập loại xe" />
+            </Form.Item>
+            <Form.Item label="Sơ đồ ghế" name="schema">
+              <Input placeholder="Nhập sơ đồ ghế" />
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     </div>
   );

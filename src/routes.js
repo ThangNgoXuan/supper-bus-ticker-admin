@@ -3,15 +3,16 @@ import {
   ReconciliationOutlined,
   CarOutlined,
   PieChartOutlined,
-  CaretRightOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 
 import { IoTicketOutline } from "react-icons/io5";
 import { RiContactsBook2Line } from "react-icons/ri";
-import { AiOutlineInfoCircle, AiOutlineUser } from "react-icons/ai";
+import { AiOutlineInfoCircle, AiOutlineUser, AiOutlineSchedule } from "react-icons/ai";
 import { BiNews } from "react-icons/bi";
 import { GiMassDriver } from "react-icons/gi";
 import {MdOutlinePlace} from 'react-icons/md';
+import {TbRouter} from 'react-icons/tb';
 
 const dashboardRoutes = [
   {
@@ -20,19 +21,35 @@ const dashboardRoutes = [
     icon: <HomeOutlined />,
   },
   {
-    path: "/ticker",
-    name: "Quản lí vé xe",
+    name: "Vé xe",
     icon: <IoTicketOutline />,
+    children: [
+      {
+        path: "/ticker",
+        name: "Quản lí vé xe",
+        icon: <IoTicketOutline />,
+      },
+      {
+        path: "/route",
+        name: "Tuyến vận chuyển",
+        icon: <TbRouter />,
+      },
+      {
+        path: "/coach",
+        name: "Quản lí loại xe",
+        icon: <UnorderedListOutlined />,
+      },
+      {
+        path: "/schedule",
+        name: "Lịch chạy",
+        icon: <AiOutlineSchedule />,
+      },
+    ],
   },
   {
     name: "Quản lí xe",
     icon: <CarOutlined />,
     children: [
-      {
-        path: "/coach",
-        name: "Quản lí loại xe",
-        icon: <CaretRightOutlined />,
-      },
       {
         path: "/place",
         name: "Địa điểm đoán khách",
@@ -41,12 +58,17 @@ const dashboardRoutes = [
       {
         path: "/route",
         name: "Tuyến vận chuyển",
-        icon: <CaretRightOutlined />,
+        icon: <TbRouter />,
       },
       {
-        path: "/category",
+        path: "/coach",
+        name: "Quản lí loại xe",
+        icon: <UnorderedListOutlined />,
+      },
+      {
+        path: "/schedule",
         name: "Lịch chạy",
-        icon: <CaretRightOutlined />,
+        icon: <AiOutlineSchedule />,
       },
     ],
   },
