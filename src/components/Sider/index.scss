@@ -1,20 +1,10 @@
-
-.ant-layout-sider {
-    width: rem(400) !important;
-}
-
 .sider_logoTitle {
     @include adjust-flex();
     height: $height-header;
 
     .ant-image-img {
         border-radius: 50%;
-    }
-
-    .ant-typography {
-        color: $white;
-        margin: 0;
-        margin-left: rem(8);
+        border: rem(1) solid $white;
     }
 }
 
@@ -30,9 +20,10 @@
     @include font-base();
 }
 
-.ant-menu-item-icon {
+.ant-menu-item-icon,.ant-menu-submenu-title {
     svg {
         height: rem(20);
         width: auto;
     }
 }
+

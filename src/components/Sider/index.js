@@ -1,16 +1,14 @@
 import React from "react";
-import { Layout, Menu, Typography, Image } from "antd";
+import { Layout, Menu, Image } from "antd";
 import { Link } from "react-router-dom";
 
 export default function Sider({ router }) {
   const { Sider } = Layout;
   const { SubMenu, Item } = Menu;
-  const { Title } = Typography;
   return (
-    <Sider>
+    <Sider collapsible>
       <div className="sider_logoTitle">
-        <Image src="https://picsum.photos/50/50" />
-        <Title level={3}>Bug Ticker</Title>
+        <Image src="https://picsum.photos/50/50" preview={false} />
       </div>
       <Menu mode="inline" theme="dark">
         {router.map(
@@ -18,13 +16,13 @@ export default function Sider({ router }) {
             item.name &&
             (item.children ? (
               <SubMenu
-                key={`submenu-item-${index}`}
+                key={`submenu-item-${index.toString()}`}
                 title={item.name}
                 icon={item.icon}
               >
                 {item.children &&
                   item.children.map((ele, idx) => (
-                    <Item key={`children-item-${idx}`} icon={ele.icon}>
+                    <Item key={`children-item-${index.toString()}-${idx.toString()}`} icon={ele.icon}>
                       <Link to={ele.path}>{ele.name}</Link>
                     </Item>
                   ))}

@@ -45,16 +45,16 @@ export default function App() {
               <Route exact path="/about" element={<AboutUs />} />
               <Route exact path="/news" element={<News />} />
               <Route exact path="/recruit" element={<Recruit />} />
-              <Route path="*" element={<NotFound />} />
               <Route exact path="/recruit" element={<Recruit />} />
               <Route exact path="/user" element={<User />} />
               <Route exact path="/route" element={<RoutesPage />} />
               <Route exact path="/place" element={<Place />} />
-              <Route exact path="/" element={<Login />} />
               <Route exact path="/schedule" element={<Schedule />} />
               <Route exact path="/booking" element={<Booking />} />
               <Route exact path="/schema" element={<Schema />} />
               <Route exact path="/type-coach" element={<TypeCoach />} />
+              <Route exact path="/" element={<Login />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Content>
           <Footer />

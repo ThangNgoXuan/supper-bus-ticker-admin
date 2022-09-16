@@ -41,12 +41,15 @@ export default function Booking() {
   const { Option } = Select;
   const { Title } = Typography;
 
-  const booking = new Array(35).fill({
-    id: "a12",
-    name: "Ngô Xuân Thăng",
-    place: "Điểm đón",
-    status: false,
-  });
+  const originData = [];
+  for (let i = 0; i < 100; i++) {
+    originData.push({
+      id: i.toString(),
+      name: `Edrward ${i}`,
+      place: `London Park no. ${i}`,
+      status: i % 2 === 0 ? false : true,
+    });
+  }
 
   return (
     <div className="p-booking">
@@ -125,8 +128,8 @@ export default function Booking() {
           </Select>
         </div>
       </div>
-      <div className="p-booking_list">
-        {booking.map((item, index) => (
+      <div className="p-booking_list p-booking_list-16">
+        {originData.map((item, index) => (
           <div
             className="p-booking_list_item"
             key={`p-booking_list_item-${index.toString()}`}
