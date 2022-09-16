@@ -7,18 +7,26 @@ import {
   Table,
   Typography,
 } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import TypeCoachApi from "../../api/typeCoach";
 
 export default function TypeCoach() {
   const [open, setOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
-
+const  [data, setData] = useState([]);
   const { Title } = Typography;
+
+  useEffect(() => {
+    TypeCoachApi.getAllTypeCoach().then((res)=>{
+      setData(res?.data)
+    })
+  }, [setData]);
+
   const columnsTypeCoach = [
     {
-      title: "Stt",
-      dataIndex: "id",
-      key: "id",
+      title: "ID",
+      dataIndex: "_id",
+      key: "_id",
     },
     {
       title: "Loại xe",
@@ -29,6 +37,11 @@ export default function TypeCoach() {
       title: "Sơ đồ ghế",
       dataIndex: "schema",
       key: "schema",
+    },
+    {
+      title: "Số ghế ngồi",
+      dataIndex: "number_of_seats",
+      key: "number_of_seats",
     },
     {
       title: "",
@@ -46,12 +59,6 @@ export default function TypeCoach() {
       ),
     },
   ];
-
-  const listCoachType = new Array(3).fill({
-    id: "1",
-    name: "Xe 36 chỗ",
-    schema: "sơ đồ 1",
-  });
 
   const handleDeleteType = () => {
     notification.open({
@@ -103,12 +110,12 @@ export default function TypeCoach() {
             Tạo mới
           </Button>
         </div>
-        <Table columns={columnsTypeCoach} dataSource={listCoachType}></Table>
+        <Table columns={columnsTypeCoach} dataSource={data}></Table>
       </div>
       <div className="p-schema_modalTypeCoach">
         <Modal
           title="Tạo loại xe mới"
-          visible={open}
+          open={open}
           onCancel={handleClose}
           footer={[
             <>
@@ -133,7 +140,7 @@ export default function TypeCoach() {
       <div className="p-schema_modalTypeCoachUpdate">
         <Modal
           title="Cập nhật loại xe"
-          visible={openUpdate}
+          open={openUpdate}
           onCancel={handleCloseUpdate}
           footer={[
             <>
@@ -144,7 +151,11 @@ export default function TypeCoach() {
             </>,
           ]}
         >
-          <Form onFinish={onFinishUpdate} id="formTypeCoachUpdate" layout="vertical">
+          <Form
+            onFinish={onFinishUpdate}
+            id="formTypeCoachUpdate"
+            layout="vertical"
+          >
             <Form.Item label="Loại xe" name="name">
               <Input placeholder="Nhập loại xe" />
             </Form.Item>
