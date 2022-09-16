@@ -107,7 +107,7 @@ export default function TypeCoach() {
       </div>
       <div className="p-schema_modalTypeCoach">
         <Modal
-          title="Tọa loại xe mới"
+          title="Tạo loại xe mới"
           visible={open}
           onCancel={handleClose}
           footer={[

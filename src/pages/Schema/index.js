@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Form,
   Input,
   Modal,
@@ -49,6 +50,63 @@ export default function Schema() {
     {
       id: "3",
       name: "sơ đồ xe giường nằm",
+    },
+  ];
+
+  const columns = [
+    {
+      title: "ID",
+      key: "id",
+      dataIndex: "id",
+    },
+    {
+      title: "A",
+      key: "a",
+      dataIndex: "a",
+    },
+    {
+      title: "B",
+      key: "b",
+      dataIndex: "b",
+    },
+    {
+      title: "C",
+      key: "c",
+      dataIndex: "c",
+    },
+    {
+      title: "D",
+      key: "d",
+      dataIndex: "d",
+    },
+    {
+      title: "E",
+      key: "e",
+      dataIndex: "e",
+    },
+  ];
+
+  const data = [
+    {
+      id: 1,
+    },
+    {
+      id: 2,
+    },
+    {
+      id: 3,
+    },
+    {
+      id: 4,
+    },
+    {
+      id: 5,
+    },
+    {
+      id: 6,
+    },
+    {
+      id: 7,
     },
   ];
 
@@ -117,11 +175,16 @@ export default function Schema() {
           ]}
         >
           <Form onFinish={onFinish} id="formSchema" layout="vertical">
-            <Form.Item label="Loại xe" name="name">
-              <Input placeholder="Nhập loại xe" />
+            <Form.Item label="Tên sơ đồ xe" name="name">
+              <Input placeholder="Nhập tên sơ đồ" />
             </Form.Item>
             <Form.Item label="Sơ đồ ghế" name="schema">
-              <Input placeholder="Nhập sơ đồ ghế" />
+              <Checkbox>Tầng 1</Checkbox>
+              <Table columns={columns} dataSource={data} pagination={false} />
+            </Form.Item>
+            <Form.Item>
+              <Checkbox>Tầng 2</Checkbox>
+              <Table columns={columns} dataSource={data} pagination={false} />
             </Form.Item>
           </Form>
         </Modal>
@@ -140,7 +203,11 @@ export default function Schema() {
             </>,
           ]}
         >
-          <Form onFinish={onFinishUpdate} id="formSchemaUpdate" layout="vertical">
+          <Form
+            onFinish={onFinishUpdate}
+            id="formSchemaUpdate"
+            layout="vertical"
+          >
             <Form.Item label="Loại xe" name="name">
               <Input placeholder="Nhập loại xe" />
             </Form.Item>

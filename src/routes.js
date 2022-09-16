@@ -49,20 +49,20 @@ const dashboardRoutes = [
         icon: <UnorderedListOutlined />,
       },
       {
-        path: "/coach",
-        name: "Quản lí xe",
+        path: "/type-coach",
+        name: "Quản lí loại xe",
         icon: <UnorderedListOutlined />,
       },
       {
-        path: "/type-coach",
-        name: "Quản lí loại xe",
+        path: "/coach",
+        name: "Quản lí xe",
         icon: <UnorderedListOutlined />,
       },
     ],
   },
   {
     name: "Tuyến",
-    icon: <CarOutlined />,
+    icon: <TbRouter />,
     children: [
       {
         path: "/place",

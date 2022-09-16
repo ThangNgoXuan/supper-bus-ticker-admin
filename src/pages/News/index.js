@@ -52,7 +52,6 @@ export default function News() {
     },
   ];
 
-
   const listData = new Array(30).fill({
     id: 1,
     title: `Bài viết một`,
@@ -61,7 +60,6 @@ export default function News() {
       "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
   });
 
-
   const { Title } = Typography;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
@@ -69,14 +67,13 @@ export default function News() {
   // HandleDelete
   const handleDelete = () => {
     notification.open({
-      message: 'Xóa thành công',
-    })
+      message: "Xóa thành công",
+    });
   };
 
   // Pagination Table
   const [tableParams, setTableParams] = useState({
     pagination: {
-      current: 1,
       pageSize: 8,
     },
   });
@@ -106,7 +103,7 @@ export default function News() {
     console.log(data);
     notification.open({
       message: "Thêm thành công",
-    })
+    });
     handleCancel();
   };
 
@@ -119,12 +116,11 @@ export default function News() {
     setIsModalUpdateOpen(false);
   };
 
-
   const submitNewsUpdate = (data) => {
     console.log(data);
     notification.open({
       message: "Cập nhật thành công",
-    })
+    });
     handleCancelUpdate();
   };
 
@@ -142,7 +138,7 @@ export default function News() {
           dataSource={listData}
           pagination={tableParams.pagination}
           handleTableChange={handleTableChange}
-          onChange={e => console.log(e.current)}
+          onChange={(e) => console.log(e.current)}
         />
       </div>
       <div className="p-news_modal">
@@ -195,7 +191,7 @@ export default function News() {
                   name="content"
                   rules={[
                     {
-                      required: true, 
+                      required: true,
                       message: "Vui lòng nhập tiêu đề",
                     },
                   ]}
@@ -214,7 +210,7 @@ export default function News() {
         </Modal>
       </div>
       <div className="p-modal_update">
-      <Modal
+        <Modal
           title="Cập nhật thông tin tin tức"
           visible={isModalUpdateOpen}
           onCancel={handleCancelUpdate}
@@ -262,7 +258,7 @@ export default function News() {
                   name="content"
                   rules={[
                     {
-                      required: true, 
+                      required: true,
                       message: "Vui lòng nhập tiêu đề",
                     },
                   ]}
