@@ -128,7 +128,7 @@ export default function Booking() {
           </Select>
         </div>
       </div>
-      <div className="p-booking_list p-booking_list-16">
+      <div className="p-booking_list">
         {originData.map((item, index) => (
           <div
             className="p-booking_list_item"
