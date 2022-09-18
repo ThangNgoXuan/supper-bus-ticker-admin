@@ -25,6 +25,8 @@
 @import './pages/Login/index.scss';
 @import './pages/Booking/index.scss';
 @import './pages/Schema/index.scss';
+@import './pages/TypeCoach/index.scss';
+
 
 .App {
     font-family: sans-serif;
@@ -34,9 +36,16 @@
 
 .ant-layout-content {
     background-color: $white;
-    padding: rem(16);
+    padding: rem(24);
 }
 
 .ant-notification-notice-message {
     margin: 0;
+}
+
+.ant-modal-header {
+    padding-bottom: rem(12) !important;
+}
+.ant-modal-title {
+    font-weight: 600 !important;
 }

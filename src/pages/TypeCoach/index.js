@@ -7,20 +7,21 @@ import {
   Table,
   Typography,
 } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import TypeCoachApi from "../../api/typeCoach";
 
 export default function TypeCoach() {
   const [open, setOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
-const  [data, setData] = useState([]);
+  const [data, setData] = useState([]);
   const { Title } = Typography;
 
   useEffect(() => {
-    TypeCoachApi.getAllTypeCoach().then((res)=>{
-      setData(res?.data)
-    })
-  }, [setData]);
+    TypeCoachApi.getAllTypeCoach().then((res) => {
+      setData(res?.data);
+    });
+  }, []);
 
   const columnsTypeCoach = [
     {
@@ -74,10 +75,19 @@ const  [data, setData] = useState([]);
     setOpen(false);
   };
 
-  const onFinish = (data) => {
+  const onFinish = (data) => {  
     console.log(data);
-    notification.open({
-      message: "Tạo thành công",
+    TypeCoachApi.addTypeCoach(data)
+    .then((res) => {
+      console.log(res);
+      notification.open({
+        message: "Cập nhật thành công",
+      });
+    })
+    .catch((err) => {
+      notification.open({
+        message: "Cập nhật thất bại",
+      });
     });
     handleClose();
   };
@@ -92,31 +102,41 @@ const  [data, setData] = useState([]);
 
   const onFinishUpdate = (data) => {
     console.log(data);
-    notification.open({
-      message: "Cập nhật thành công",
+    TypeCoachApi.addTypeCoach(data)
+    .then((res) => {
+      console.log(res);
+      notification.open({
+        message: "Cập nhật thành công",
+      });
+    })
+    .catch((err) => {
+      notification.open({
+        message: "Cập nhật thất bại",
+      });
     });
     handleCloseUpdate();
   };
 
   return (
-    <div className="p-schema">
+    <div className="p-typeCoach">
       <div>
-        <Title>Quản lí loại xe</Title>
+        <Title level={4}>Quản lí loại xe</Title>
       </div>
-      <div className="p-schema_type">
-        <div className="p-schema_typeCoach_header">
-          <Title level={5}>Loại xe</Title>
-          <Button type="primary" onClick={handleOpen}>
+      <div className="p-typeCoach_type">
+        <div className="p-typeCoach_typeCoach_header">
+          <Button size="large" type="primary" onClick={handleOpen}>
+            <PlusOutlined />
             Tạo mới
           </Button>
         </div>
         <Table columns={columnsTypeCoach} dataSource={data}></Table>
       </div>
-      <div className="p-schema_modalTypeCoach">
+      <div className="_modalTypeCoap-typeCoachch">
         <Modal
           title="Tạo loại xe mới"
           open={open}
           onCancel={handleClose}
+          maskClosable={false}
           footer={[
             <>
               <Button onClick={handleClose}>Hủy</Button>
@@ -127,17 +147,24 @@ const  [data, setData] = useState([]);
           ]}
         >
           <Form onFinish={onFinish} id="formTypeCoach" layout="vertical">
+            <Title level={5}>Thông tin chung</Title>
             <Form.Item label="Loại xe" name="name">
-              <Input placeholder="Nhập loại xe" />
+              <Input size='large' placeholder="Nhập loại xe" />
             </Form.Item>
             <Form.Item label="Sơ đồ ghế" name="schema">
               <Input placeholder="Nhập sơ đồ ghế" />
+            </Form.Item>
+            <Form.Item label="Số ghế" name="number_of_seats">
+              <Input placeholder="Nhập số ghế" type="number" />
+            </Form.Item>
+            <Form.Item label="Số ghế" name="description">
+              <Input placeholder="Nhập số ghế"/>
             </Form.Item>
           </Form>
         </Modal>
       </div>
 
-      <div className="p-schema_modalTypeCoachUpdate">
+      <div className="p-typeCoach_modalTypeCoachUpdate">
         <Modal
           title="Cập nhật loại xe"
           open={openUpdate}

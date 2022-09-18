@@ -1,10 +1,10 @@
 import React from "react";
 import { Dropdown, Image, Layout, Menu, Typography } from "antd";
-import { DownOutlined, SmileOutlined, LogoutOutlined } from "@ant-design/icons";
+import { CaretDownOutlined, SmileOutlined, LogoutOutlined } from "@ant-design/icons";
 
 const account = {
   img: "https://picsum.photos/200",
-  name: "Thang Ngo",
+  name: "BusTicket Admin",
 };
 
 const menu = (
@@ -35,9 +35,9 @@ export default function Header() {
     <Header>
       <Dropdown overlay={menu}>
           <div className="header-account">
-            <DownOutlined />
-            <Title level={5}>{account.name}</Title>
+            <CaretDownOutlined />
             <Image preview={false} src={account.img} />
+            <Title level={5}>{account.name}</Title>
           </div>
       </Dropdown>
     </Header>

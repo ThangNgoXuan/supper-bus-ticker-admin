@@ -1,0 +1,19 @@
+.p-typeCoach {
+    .ant-typography {
+        text-align: left;
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+
+    .ant-btn {
+        background-color: $cool-black;
+        float: right;
+        border-color: transparent;
+        margin-bottom: rem(20);
+        margin-left: rem(8);
+
+        &:last-child {
+            margin-left: 0;
+        }
+    }
+}

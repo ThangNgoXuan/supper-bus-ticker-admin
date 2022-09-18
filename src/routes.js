@@ -16,6 +16,7 @@ import { BiNews } from "react-icons/bi";
 import { GiMassDriver } from "react-icons/gi";
 import { MdOutlinePlace, MdOutlineBorderColor } from "react-icons/md";
 import { TbRouter } from "react-icons/tb";
+import { BsCardList } from "react-icons/bs";
 
 const dashboardRoutes = [
   {
@@ -51,7 +52,7 @@ const dashboardRoutes = [
       {
         path: "/type-coach",
         name: "Quản lí loại xe",
-        icon: <UnorderedListOutlined />,
+        icon: <BsCardList />,
       },
       {
         path: "/coach",

@@ -3,6 +3,7 @@
     background-color: $white;
     @include adjust-flex(flex-end, flex-start);
     border-bottom: rem(1) solid $anti-flash-white;
+    padding: 0 rem(24);
 
     .header-account {
         @include adjust-flex();
@@ -10,14 +11,16 @@
         cursor: pointer;
 
         .ant-image {
-            width: rem(32);
+            width: rem(40);
+            margin: 0 rem(12);
             &-img {
                 border-radius: 50%;
             }
         }
 
         .ant-typography {
-            margin: 0 rem(8);
+            margin: 0;
+            font-weight: 600;
         }
     }
 }
