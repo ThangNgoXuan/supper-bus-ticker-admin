@@ -6,11 +6,11 @@ export default function Sider({ router }) {
   const { Sider } = Layout;
   const { SubMenu, Item } = Menu;
   return (
-    <Sider collapsible>
+    <Sider collapsible width={248}>
       <div className="sider_logoTitle">
         <Image src="https://picsum.photos/50/50" preview={false} />
       </div>
-      <Menu mode="inline" theme="dark">
+      <Menu mode="inline">
         {router.map(
           (item, index) =>
             item.name &&

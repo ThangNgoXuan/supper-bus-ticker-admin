@@ -2,6 +2,7 @@
     height: $height-header;
     background-color: $white;
     @include adjust-flex(flex-end, flex-start);
+    border-bottom: rem(1) solid $anti-flash-white;
 
     .header-account {
         @include adjust-flex();

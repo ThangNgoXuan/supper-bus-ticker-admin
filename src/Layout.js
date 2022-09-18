@@ -30,7 +30,6 @@ export default function MainLayout() {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider router={dashboardRoutes} />
-
       <Layout>
         <Header />
         <Content>

@@ -1,29 +1,39 @@
 .sider_logoTitle {
-    @include adjust-flex();
-    height: $height-header;
+  @include adjust-flex();
+  height: $height-header;
 
-    .ant-image-img {
-        border-radius: 50%;
-        border: rem(1) solid $white;
-    }
+  .ant-image-img {
+    border-radius: 50%;
+    border: rem(1) solid $white;
+  }
 }
 
 .ant-menu-item {
-    vertical-align: text-bottom;
-    svg {
-        height: rem(20);
-        width: auto;
-    }
+  vertical-align: text-bottom;
+  svg {
+    height: rem(20);
+    width: auto;
+  }
 }
 
 .ant-menu-title-content {
-    @include font-base();
+  @include font-base();
 }
 
-.ant-menu-item-icon,.ant-menu-submenu-title {
-    svg {
-        height: rem(20);
-        width: auto;
-    }
+.ant-menu-item-icon,
+.ant-menu-submenu-title {
+  svg {
+    height: rem(20);
+    width: auto;
+  }
 }
 
+.ant-layout-sider {
+  background-color: $white;
+  box-shadow: inset rem(-1) 0 0 rgba($raisin-black, 0.1);
+}
+
+.ant-layout-sider-trigger {
+    color: $black;
+    background-color: $anti-flash-white;
+}
