@@ -10,17 +10,29 @@ import {
 import { PlusOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import TypeCoachApi from "../../api/typeCoach";
+import useValues from "../../hooks/useValues";
+import useFetch from "../../hooks/useFetch";
 
 export default function TypeCoach() {
-  const [open, setOpen] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
-  const [data, setData] = useState([]);
+  // const [open, setOpen] = useState(false);
+  // const [openUpdate, setOpenUpdate] = useState(false);
+
+  // useValues dùng thay thế khi có quá nhiều useState
+  const [values, setValues] = useValues({
+    open: false,
+    openUpdate: false,
+  });
+
   const { Title } = Typography;
 
+  const [loading, data, _, fetch, refetch] = useFetch(
+    {},
+    TypeCoachApi.getAllTypeCoach
+  );
+
   useEffect(() => {
-    TypeCoachApi.getAllTypeCoach().then((res) => {
-      setData(res?.data);
-    });
+    //call api lấy data typecoach
+    fetch({}, true);
   }, []);
 
   const columnsTypeCoach = [
@@ -68,52 +80,65 @@ export default function TypeCoach() {
   };
 
   const handleOpen = () => {
-    setOpen(true);
+    // setOpen(true);
+    setValues({
+      open: true,
+    });
   };
 
   const handleClose = () => {
-    setOpen(false);
+    // setOpen(false);
+    setValues({
+      open: false,
+    });
   };
 
-  const onFinish = (data) => {  
-    console.log(data);
+  const onFinish = (data) => {
+    // console.log(data);
     TypeCoachApi.addTypeCoach(data)
-    .then((res) => {
-      console.log(res);
-      notification.open({
-        message: "Cập nhật thành công",
+      .then((res) => {
+        refetch(); // fetch lại data để lấy dữ liệu mới thêm vào
+        notification.open({
+          message: "Cập nhật thành công",
+        });
+      })
+      .catch((err) => {
+        notification.open({
+          message: "Cập nhật thất bại",
+        });
       });
-    })
-    .catch((err) => {
-      notification.open({
-        message: "Cập nhật thất bại",
-      });
-    });
     handleClose();
   };
 
   const handleOpenUpdate = () => {
-    setOpenUpdate(true);
+    // setOpenUpdate(true);
+    setValues({
+      openUpdate: true,
+    });
   };
 
   const handleCloseUpdate = () => {
-    setOpenUpdate(false);
+    // setOpenUpdate(false);
+    setValues({
+      openUpdate: false,
+    });
   };
 
   const onFinishUpdate = (data) => {
-    console.log(data);
+    // console.log(data);
     TypeCoachApi.addTypeCoach(data)
-    .then((res) => {
-      console.log(res);
-      notification.open({
-        message: "Cập nhật thành công",
+      .then((res) => {
+        // console.log(res);
+        refetch();
+        notification.open({
+          message: "Cập nhật thành công",
+        });
+      })
+      .catch((err) => {
+        notification.open({
+          message: "Cập nhật thất bại",
+        });
       });
-    })
-    .catch((err) => {
-      notification.open({
-        message: "Cập nhật thất bại",
-      });
-    });
     handleCloseUpdate();
   };
 
@@ -129,12 +154,16 @@ export default function TypeCoach() {
             Tạo mới
           </Button>
         </div>
-        <Table columns={columnsTypeCoach} dataSource={data}></Table>
+        <Table
+          columns={columnsTypeCoach}
+          dataSource={data}
+          loading={loading}
+        ></Table>
       </div>
       <div className="_modalTypeCoap-typeCoachch">
         <Modal
           title="Tạo loại xe mới"
-          open={open}
+          open={values.open}
           onCancel={handleClose}
           maskClosable={false}
           footer={[
@@ -149,7 +178,7 @@ export default function TypeCoach() {
           <Form onFinish={onFinish} id="formTypeCoach" layout="vertical">
             <Title level={5}>Thông tin chung</Title>
             <Form.Item label="Loại xe" name="name">
-              <Input size='large' placeholder="Nhập loại xe" />
+              <Input size="large" placeholder="Nhập loại xe" />
             </Form.Item>
             <Form.Item label="Sơ đồ ghế" name="schema">
               <Input placeholder="Nhập sơ đồ ghế" />
@@ -158,7 +187,7 @@ export default function TypeCoach() {
               <Input placeholder="Nhập số ghế" type="number" />
             </Form.Item>
             <Form.Item label="Số ghế" name="description">
-              <Input placeholder="Nhập số ghế"/>
+              <Input placeholder="Nhập số ghế" />
             </Form.Item>
           </Form>
         </Modal>
@@ -167,7 +196,7 @@ export default function TypeCoach() {
       <div className="p-typeCoach_modalTypeCoachUpdate">
         <Modal
           title="Cập nhật loại xe"
-          open={openUpdate}
+          open={values.openUpdate}
           onCancel={handleCloseUpdate}
           footer={[
             <>
