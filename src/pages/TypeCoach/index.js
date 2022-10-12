@@ -2,29 +2,33 @@ import {
   Button,
   Form,
   Input,
+  InputNumber,
   Modal,
   notification,
   Table,
   Typography,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import TypeCoachApi from "../../api/typeCoach";
 import useValues from "../../hooks/useValues";
 import useFetch from "../../hooks/useFetch";
 
 export default function TypeCoach() {
-  // const [open, setOpen] = useState(false);
-  // const [openUpdate, setOpenUpdate] = useState(false);
-
   // useValues dùng thay thế khi có quá nhiều useState
   const [values, setValues] = useValues({
     open: false,
     openUpdate: false,
+    idUpdate: "",
   });
 
-  const { Title } = Typography;
+  const [form] = Form.useForm();
+  const [formUpdate] = Form.useForm();
 
+  const { Title } = Typography;
+  const { TextArea } = Input;
+
+  /* eslint-disable-next-line */
   const [loading, data, _, fetch, refetch] = useFetch(
     {},
     TypeCoachApi.getAllTypeCoach
@@ -33,13 +37,17 @@ export default function TypeCoach() {
   useEffect(() => {
     //call api lấy data typecoach
     fetch({}, true);
+    /* eslint-disable-next-line */
   }, []);
 
   const columnsTypeCoach = [
     {
-      title: "ID",
+      title: "STT",
       dataIndex: "_id",
-      key: "_id",
+      // key: "_id",
+      render: (index) => (
+        <span>{(index = data.findIndex((x) => x._id === index) + 1)}</span>
+      ),
     },
     {
       title: "Loại xe",
@@ -48,8 +56,8 @@ export default function TypeCoach() {
     },
     {
       title: "Sơ đồ ghế",
-      dataIndex: "schema",
-      key: "schema",
+      dataIndex: "seat_diagram",
+      key: "seat_diagram",
     },
     {
       title: "Số ghế ngồi",
@@ -57,15 +65,28 @@ export default function TypeCoach() {
       key: "number_of_seats",
     },
     {
+      title: "Mô tả",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
       title: "",
-      dataIndex: "function",
-      key: "function",
-      render: () => (
+      render: (record) => (
         <div className="p-recruit_table_button">
-          <Button type="primary" onClick={handleDeleteType}>
+          <Button
+            type="primary"
+            onClick={() => {
+              handleDeleteType(record);
+            }}
+          >
             Xóa
           </Button>
-          <Button onClick={handleOpenUpdate} type="primary">
+          <Button
+            onClick={() => {
+              handleOpenUpdate(record);
+            }}
+            type="primary"
+          >
             Cập nhật
           </Button>
         </div>
@@ -73,62 +94,75 @@ export default function TypeCoach() {
     },
   ];
 
-  const handleDeleteType = () => {
-    notification.open({
-      message: "Xóa thành công",
-    });
+  const handleDeleteType = (record) => {
+    console.log(record);
+    TypeCoachApi.deleteTypeCoach(record._id)
+      .then((res) => {
+        refetch(); // fetch lại data để lấy dữ liệu mới thêm vào
+        notification.open({
+          message: "Xoá thành công!",
+        });
+      })
+      .catch((err) => {
+        notification.open({
+          message: "Xóa thất bại!",
+        });
+      });
   };
 
   const handleOpen = () => {
-    // setOpen(true);
     setValues({
       open: true,
     });
   };
 
   const handleClose = () => {
-    // setOpen(false);
     setValues({
       open: false,
     });
+    form.resetFields();
   };
 
   const onFinish = (data) => {
-    // console.log(data);
     TypeCoachApi.addTypeCoach(data)
       .then((res) => {
         refetch(); // fetch lại data để lấy dữ liệu mới thêm vào
         notification.open({
-          message: "Cập nhật thành công",
+          message: "Tạo mới thành công",
         });
+        form.resetFields();
       })
       .catch((err) => {
         notification.open({
-          message: "Cập nhật thất bại",
+          message: "Tạo mới thất bại",
         });
       });
     handleClose();
   };
 
-  const handleOpenUpdate = () => {
-    // setOpenUpdate(true);
+  const handleOpenUpdate = (data) => {
     setValues({
       openUpdate: true,
+      idUpdate: data._id,
+    });
+    console.log(data);
+    console.log(values.idUpdate);
+    formUpdate.setFieldsValue({
+      name: data.name,
+      number_of_seats: data.number_of_seats,
+      description: data.description,
     });
   };
 
   const handleCloseUpdate = () => {
-    // setOpenUpdate(false);
     setValues({
       openUpdate: false,
     });
   };
 
   const onFinishUpdate = (data) => {
-    // console.log(data);
-    TypeCoachApi.addTypeCoach(data)
+    TypeCoachApi.updateTypeCoach(data, values.idUpdate)
       .then((res) => {
-        // console.log(res);
         refetch();
         notification.open({
           message: "Cập nhật thành công",
@@ -160,7 +194,7 @@ export default function TypeCoach() {
           loading={loading}
         ></Table>
       </div>
-      <div className="_modalTypeCoap-typeCoachch">
+      <div className="p-typeCoach_modalTypeCoap-typeCoachch">
         <Modal
           title="Tạo loại xe mới"
           open={values.open}
@@ -168,26 +202,70 @@ export default function TypeCoach() {
           maskClosable={false}
           footer={[
             <>
-              <Button onClick={handleClose}>Hủy</Button>
-              <Button htmlType="submit" form="formTypeCoach">
+              <Button
+                onClick={handleClose}
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+              >
+                Hủy
+              </Button>
+              <Button
+                htmlType="submit"
+                form="formTypeCoach"
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+              >
                 Tạo
               </Button>
             </>,
           ]}
         >
-          <Form onFinish={onFinish} id="formTypeCoach" layout="vertical">
+          <Form
+            onFinish={onFinish}
+            form={form}
+            id="formTypeCoach"
+            layout="vertical"
+          >
             <Title level={5}>Thông tin chung</Title>
-            <Form.Item label="Loại xe" name="name">
+            <Form.Item
+              label="Tên loại xe"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập tên loại xe!",
+                },
+              ]}
+            >
               <Input size="large" placeholder="Nhập loại xe" />
             </Form.Item>
             <Form.Item label="Sơ đồ ghế" name="schema">
-              <Input placeholder="Nhập sơ đồ ghế" />
+              <Input placeholder="Nhập sơ đồ ghế (*)" />
             </Form.Item>
-            <Form.Item label="Số ghế" name="number_of_seats">
-              <Input placeholder="Nhập số ghế" type="number" />
+            <Form.Item
+              label="Số ghế"
+              name="number_of_seats"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập số ghế!",
+                },
+              ]}
+            >
+              <InputNumber
+                placeholder="Nhập số ghế (*)"
+                style={{ width: "100%" }}
+              />
             </Form.Item>
-            <Form.Item label="Số ghế" name="description">
-              <Input placeholder="Nhập số ghế" />
+            <Form.Item
+              label="Mô tả"
+              name="description"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập mô tả!",
+                },
+              ]}
+            >
+              <TextArea placeholder="Nhập sơ đồ ghế (*)" rows={4} />
             </Form.Item>
           </Form>
         </Modal>
@@ -208,15 +286,53 @@ export default function TypeCoach() {
           ]}
         >
           <Form
+            form={formUpdate}
             onFinish={onFinishUpdate}
             id="formTypeCoachUpdate"
             layout="vertical"
           >
-            <Form.Item label="Loại xe" name="name">
-              <Input placeholder="Nhập loại xe" />
+            <Title level={5}>Thông tin chung</Title>
+            <Form.Item
+              label="Tên loại xe"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập tên loại xe!",
+                },
+              ]}
+            >
+              <Input size="large" placeholder="Nhập loại xe" />
             </Form.Item>
             <Form.Item label="Sơ đồ ghế" name="schema">
-              <Input placeholder="Nhập sơ đồ ghế" />
+              <Input placeholder="Nhập sơ đồ ghế (*)" />
+            </Form.Item>
+            <Form.Item
+              label="Số ghế"
+              name="number_of_seats"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập số ghế!",
+                },
+              ]}
+            >
+              <InputNumber
+                placeholder="Nhập số ghế (*)"
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Mô tả"
+              name="description"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập mô tả!",
+                },
+              ]}
+            >
+              <TextArea placeholder="Nhập sơ đồ ghế (*)" rows={4} />
             </Form.Item>
           </Form>
         </Modal>

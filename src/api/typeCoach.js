@@ -9,8 +9,8 @@ const TypeCoachApi = {
     const url = `/vehicle-category`
     return axiosClient.post(url, data);
   },
-  updateTypeCoach: (data) => {
-    const url = `/vehicle-category/${data._id}`
+  updateTypeCoach: (data, id) => {
+    const url = `/vehicle-category/${id}`
     return axiosClient.put(url, data);
   },
   deleteTypeCoach: (id) => {
