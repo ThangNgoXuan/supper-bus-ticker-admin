@@ -1,3 +1,4 @@
+import { PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Form,
@@ -7,152 +8,266 @@ import {
   Table,
   Typography,
 } from "antd";
-import React, { useState } from "react";
+import React from "react";
+import { useEffect } from "react";
+import BoardingPointApi from "../../api/boardingPoint";
+import useFetch from "../../hooks/useFetch";
+import useValues from "../../hooks/useValues";
 
 export default function Place() {
   const { Title } = Typography;
-  const [open, setOpen] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
+  const [form] = Form.useForm();
+
+  const [values, setValues] = useValues({
+    open: false,
+    setOpen: false,
+    idUpdate: "",
+  });
+
+  /* eslint-disable-next-line */
+  const [loading, data, _, fetch, refetch] = useFetch(
+    {},
+    BoardingPointApi.getAllBoardingPoint
+  );
+
+  useEffect(() => {
+    //call api lấy data typecoach
+    fetch({}, true);
+    /* eslint-disable-next-line */
+  }, []);
+
   const columns = [
     {
-      title: "Id",
-      dataIndex: "id",
-      key: "id",
+      title: "STT",
+      dataIndex: "_id",
+      render: (index) => (
+        <span>{(index = data.findIndex((x) => x._id === index) + 1)}</span>
+      ),
     },
     {
-      title: "Tỉnh",
-      dataIndex: "province",
-      key: "province",
+      title: "Điểm đón",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: "Khởi hành",
-      dataIndex: "place",
-      key: "place",
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
     },
     {
-      title: "Địa điểm đón",
-      dataIndex: "listPlace",
-      key: "listPlace",
+      title: "Số điện thoại",
+      dataIndex: "phone",
+      key: "phone",
     },
     {
-      dataIndex: "function",
-      key: "function",
-      render: () => (
+      title: "Kinh độ",
+      dataIndex: "longtitude",
+      key: "longtitude",
+    },
+    {
+      title: "Vĩ độ",
+      dataIndex: "latitude",
+      key: "latitude",
+    },
+    {
+      title: "",
+      render: (record) => (
         <div className="p-recruit_table_button">
-          <Button type="primary" onClick={handleDelete}>
+          <Button
+            type="primary"
+            onClick={() => {
+              handleDelete(record);
+            }}
+          >
             Xóa
           </Button>
-          <Button type="primary" onClick={handleOpenUpdate}>Cập nhật</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              handleOpenUpdate(record);
+            }}
+          >
+            Cập nhật
+          </Button>
         </div>
       ),
     },
   ];
 
   const handleOpen = () => {
-    setOpen(true);
+    setValues({
+      open: true,
+    });
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setValues({
+      open: false,
+      idUpdate: "",
+    });
+    form.resetFields();
   };
 
-  const handleDelete = () => {
-    notification.open({
-      message: "Xóa thành công",
-    })
-  }
+  const handleDelete = (record) => {
+    console.log(record);
+    BoardingPointApi.deleteBoardingPoint(record._id)
+      .then((res) => {
+        refetch();
+        notification.open({
+          message: "Xoá thành công!",
+        });
+      })
+      .catch((err) => {
+        notification.open({
+          message: "Xóa thất bại!",
+        });
+      });
+  };
 
-  const listData = new Array(30).fill({
-    id: "1",
-    place: "An Nhơn",
-    province: "Bình Định",
-    listPlace: ["Bến xe ngựa", "Nhơn hạnh", "Nhơn Phong"],
-  });
-
-  const handleSubmit = () => {
-    notification.open({
-      message: "Thêm thành công",
-    });
+  const handleSubmit = (data) => {
+    console.log(data);
+    if (values.idUpdate) {
+      BoardingPointApi.updateBoardingPoint(data, values.idUpdate)
+        .then((res) => {
+          refetch();
+          notification.open({
+            message: "Cập nhật thành công",
+          });
+          setValues({
+            idUpdate: "",
+          });
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Cập nhật thất bạn",
+          });
+        });
+      form.resetFields();
+    } else {
+      BoardingPointApi.addBoardingPoint(data)
+        .then((res) => {
+          refetch();
+          notification.open({
+            message: "Thêm thành công",
+          });
+          form.resetFields();
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Tạo mới thất bại",
+          });
+        });
+    }
     handleClose();
   };
 
-  const handleOpenUpdate = () => {
-    setOpenUpdate(true);
-  };
-
-  const handleCloseUpdate = () => {
-    setOpenUpdate(false);
-  };
-
-  const handleSubmitUpdate = () => {
-    notification.open({
-      message: "Cập nhật thành công",
+  const handleOpenUpdate = (record) => {
+    form.setFieldsValue({
+      name: record.name,
+      address: record.address,
+      phone: record.phone,
+      longtitude: record.longtitude,
+      latitude: record.latitude,
     });
-    handleCloseUpdate();
+    setValues({
+      open: true,
+      idUpdate: record._id,
+    });
   };
+
   return (
-    <div className="p-place">
-      <div className="p-place_title">
-        <Title level={2}>Địa điểm đón khách</Title>
+    <div className="p-typeCoach">
+      <div>
+        <Title level={4}>Địa điểm đón khách</Title>
+      </div>
+      <div className="p-typeCoach_typeCoach_header">
         <Button onClick={handleOpen} type="primary" size="large">
+          <PlusOutlined />
           Thêm mới
         </Button>
       </div>
       <div className="p-place">
-        <Table columns={columns} dataSource={listData} />
+        <Table columns={columns} dataSource={data} loading={loading} />
       </div>
       <div className="p-place_modalUpdate">
         <Modal
-          title="Tạo địa điểm mới"
-          visible={open}
+          title={values.idUpdate ? "Cập nhật địa điểm" : "Tạo địa điểm mới"}
+          visible={values.open}
           footer={[
             <>
-              <Button onClick={handleClose}>Hủy</Button>
-              <Button form="formplace" htmlType="submit">
-                Tạo
+              <Button
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+                onClick={handleClose}
+              >
+                Hủy
+              </Button>
+              <Button
+                htmlType="submit"
+                form="formplace"
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+              >
+                {!values.idUpdate ? "Tạo" : "Cập nhật"}
               </Button>
             </>,
           ]}
           onCancel={handleClose}
         >
-          <Form id="formplace" onFinish={handleSubmit} layout="vertical">
-            <Form.Item label="Tỉnh thành">
-              <Input placeholder="Vui lòng nhập tỉnh" />
-            </Form.Item>
-            <Form.Item label="Điểm khởi hành">
-              <Input placeholder="Nhập điểm khởi hành" />
-            </Form.Item>
-
-            <Form.Item label="Điểm đón">
+          <Form
+            form={form}
+            id="formplace"
+            onFinish={handleSubmit}
+            layout="vertical"
+          >
+            <Form.Item
+              label="Điểm đón"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập điểm đón",
+                },
+              ]}
+            >
               <Input placeholder="Nhập điểm đón" />
             </Form.Item>
-          </Form>
-        </Modal>
-      </div>
-      <div className="p-place_modal">
-        <Modal
-          title="Cập nhật địa điểm"
-          visible={openUpdate}
-          footer={[
-            <>
-              <Button onClick={handleCloseUpdate}>Hủy</Button>
-              <Button form="formplaceupdate" htmlType="submit">
-                Cập nhật
-              </Button>
-            </>,
-          ]}
-          onCancel={handleCloseUpdate}
-        >
-          <Form id="formplaceupdate" onFinish={handleSubmitUpdate} layout="vertical">
-            <Form.Item label="Tỉnh thành">
-              <Input placeholder="Vui lòng nhập tỉnh" />
+            <Form.Item
+              label="Địa chỉ"
+              name="address"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập địa chỉ",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập địa chỉ" />
             </Form.Item>
-            <Form.Item label="Điểm khởi hành">
-              <Input placeholder="Nhập điểm khởi hành" />
+            <Form.Item label="Số điện thoại" name="phone">
+              <Input placeholder="Nhập số điện thoại" />
             </Form.Item>
-
-            <Form.Item label="Điểm đón">
-              <Input placeholder="Nhập điểm đón" />
+            <Form.Item
+              label="Kinh độ"
+              name="longtitude"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập kinh độ",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập điểm kinh độ" />
+            </Form.Item>
+            <Form.Item
+              label="Vĩ độ"
+              name="latitude"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập vĩ độ",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập điểm vĩ độ" />
             </Form.Item>
           </Form>
         </Modal>

@@ -5,6 +5,7 @@ import {
   InputNumber,
   Modal,
   notification,
+  Select,
   Table,
   Typography,
 } from "antd";
@@ -27,6 +28,7 @@ export default function TypeCoach() {
 
   const { Title } = Typography;
   const { TextArea } = Input;
+  const { Option } = Select;
 
   /* eslint-disable-next-line */
   const [loading, data, _, fetch, refetch] = useFetch(
@@ -44,7 +46,6 @@ export default function TypeCoach() {
     {
       title: "STT",
       dataIndex: "_id",
-      // key: "_id",
       render: (index) => (
         <span>{(index = data.findIndex((x) => x._id === index) + 1)}</span>
       ),
@@ -95,7 +96,6 @@ export default function TypeCoach() {
   ];
 
   const handleDeleteType = (record) => {
-    console.log(record);
     TypeCoachApi.deleteTypeCoach(record._id)
       .then((res) => {
         refetch(); // fetch lại data để lấy dữ liệu mới thêm vào
@@ -145,8 +145,6 @@ export default function TypeCoach() {
       openUpdate: true,
       idUpdate: data._id,
     });
-    console.log(data);
-    console.log(values.idUpdate);
     formUpdate.setFieldsValue({
       name: data.name,
       number_of_seats: data.number_of_seats,
@@ -238,7 +236,11 @@ export default function TypeCoach() {
               <Input size="large" placeholder="Nhập loại xe" />
             </Form.Item>
             <Form.Item label="Sơ đồ ghế" name="schema">
-              <Input placeholder="Nhập sơ đồ ghế (*)" />
+              <Select defaultValue="sd0" style={{ width: "100%" }} allowClear>
+                <Option value="sd0">Sơ đồ 1</Option>
+                <Option value="sd1">Sơ đồ 2</Option>
+                <Option value="sd2">Sơ đồ 3</Option>
+              </Select>
             </Form.Item>
             <Form.Item
               label="Số ghế"
@@ -278,8 +280,17 @@ export default function TypeCoach() {
           onCancel={handleCloseUpdate}
           footer={[
             <>
-              <Button onClick={handleCloseUpdate}>Hủy</Button>
-              <Button htmlType="submit" form="formTypeCoachUpdate">
+              <Button
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+                onClick={handleCloseUpdate}
+              >
+                Hủy
+              </Button>
+              <Button
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+                htmlType="submit"
+                form="formTypeCoachUpdate"
+              >
                 Cập nhật
               </Button>
             </>,
@@ -305,7 +316,11 @@ export default function TypeCoach() {
               <Input size="large" placeholder="Nhập loại xe" />
             </Form.Item>
             <Form.Item label="Sơ đồ ghế" name="schema">
-              <Input placeholder="Nhập sơ đồ ghế (*)" />
+              <Select defaultValue="sd0" style={{ width: "100%" }} allowClear>
+                <Option value="sd0">Sơ đồ 1</Option>
+                <Option value="sd1">Sơ đồ 2</Option>
+                <Option value="sd2">Sơ đồ 3</Option>
+              </Select>
             </Form.Item>
             <Form.Item
               label="Số ghế"

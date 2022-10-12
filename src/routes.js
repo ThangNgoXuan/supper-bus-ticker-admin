@@ -67,7 +67,7 @@ const dashboardRoutes = [
     children: [
       {
         path: "/place",
-        name: "Địa điểm đoán khách",
+        name: "Địa điểm đón khách",
         icon: <MdOutlinePlace />,
       },
       {
