@@ -7,23 +7,44 @@ import {
   Table,
   Typography,
 } from "antd";
-import React, { useState } from "react";
+import React from "react";
+import useFetch from "../../hooks/useFetch";
+import routerApi from "../../api/routerApi";
+import { useEffect } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import useValues from "../../hooks/useValues";
 
 export default function Routes() {
   const { Title } = Typography;
-  const [open, setOpen] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
+  const [values, setValues] = useValues({
+    open: false,
+  })
+
+  /* eslint-disable-next-line */
+  const [loading, data, _, fetch, refetch] = useFetch(
+    {},
+    routerApi.getAllRoute
+  );
+
+  useEffect(() => {
+    fetch({}, true);
+  /* eslint-disable-next-line */
+  }, []);
+
+  console.log(data);
 
   const columns = [
     {
       title: "ID",
-      dataIndex: "id",
-      key: "id",
+      dataIndex: "_id",
+      render: (index) => (
+        <span>{(index = data.findIndex((x) => x._id === index) + 1)}</span>
+      ),
     },
     {
       title: "Tuyến đường",
-      dataIndex: "route",
-      key: "route",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Điểm đầu",
@@ -45,6 +66,7 @@ export default function Routes() {
       dataIndex: "schedule",
       key: "schedule",
     },
+
     {
       dataIndex: "function",
       key: "function",
@@ -68,11 +90,15 @@ export default function Routes() {
   };
 
   const handleOpen = () => {
-    setOpen(true);
+    setValues({
+      open: true,
+    })
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setValues({
+      open: false
+    })
   };
 
   const onFinish = (data) => {
@@ -83,44 +109,30 @@ export default function Routes() {
     });
   };
 
-  const onFinishUpdate = (data) => {
-    console.log(data);
-    notification.open({
-      message: "Cập nhật thành công",
-    });
-    handleCloseUpdate();
-  };
-
   const handleOpenUpdate = () => {
-    setOpenUpdate(true);
-  };
 
-  const handleCloseUpdate = () => {
-    setOpenUpdate(false);
   };
-
-  const data = new Array(30).fill({
-    id: "1",
-    route: "Bình Dương => Bình Định",
-    start: "Bình Dương",
-    end: "Bình Định",
-    list: ["An Nhơn", "An Nhơn", "An Nhơn"],
-    schedule: ["08:00 -> 20:30", "08:00 -> 20:30"]
-  });
 
   return (
-    <div className="p-routes">
-      <div className="p-routes">
-        <Title level={2}>Quản lí tuyến xe</Title>
-        <Button onClick={handleOpen}>Tạo mới</Button>
+    <div className="p-typeCoach">
+      <div>
+        <Title level={4}>Quản lí tuyến xe</Title>
+      </div>
+      <div className="p-typeCoach_typeCoach_header">
+        <Button onClick={handleOpen} type="primary" size="large">
+        <PlusOutlined />
+          Tạo mới
+        </Button>
       </div>
       <div className="p-routes_table">
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} loading={loading} />
       </div>
       <div className="p-routes_modal">
         <Modal
           title="Tạo tuyến xe mới"
-          visible={open}
+          visible={values.open}
+          onCancel={handleClose}
+          maskClosable={false}
           footer={[
             <>
               <Button onClick={handleClose}>Hủy</Button>
@@ -131,35 +143,6 @@ export default function Routes() {
           ]}
         >
           <Form layout="" id="formRouter" onFinish={onFinish}>
-            <Form.Item name="name" label="Tên chuyến">
-              <Input placeholder="Vui lòng nhập tên chuyến" />
-            </Form.Item>
-            <Form.Item name="start" label="Điểm đầu">
-              <Input placeholder="Vui lòng nhập điểm đầu" />
-            </Form.Item>
-            <Form.Item name="end" label="Điểm cuối">
-              <Input placeholder="Vui lòng nhập điểm cuối" />
-            </Form.Item>
-            <Form.Item name="list" label="Điểm đón">
-              <Input placeholder="Vui lòng nhập điểm đón" />
-            </Form.Item>
-          </Form>
-        </Modal>
-      </div>
-      <div className="p-routes_modalUpdate">
-        <Modal
-          title="Cập nhật tuyến xe"
-          visible={openUpdate}
-          footer={[
-            <>
-              <Button onClick={handleCloseUpdate}>Hủy</Button>
-              <Button form="formRouterUpdate" type="primary" htmlType="submit">
-                Tạo
-              </Button>
-            </>,
-          ]}
-        >
-          <Form layout="" id="formRouterUpdate" onFinish={onFinishUpdate}>
             <Form.Item name="name" label="Tên chuyến">
               <Input placeholder="Vui lòng nhập tên chuyến" />
             </Form.Item>
