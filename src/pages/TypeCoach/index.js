@@ -92,10 +92,10 @@ export default function TypeCoach() {
     },
   ];
 
-  const handleDeleteType = (record) => {
+  const   handleDeleteType = (record) => {
     TypeCoachApi.deleteTypeCoach(record._id)
       .then((res) => {
-        refetch(); // fetch lại data để lấy dữ liệu mới thêm vào
+        refetch();
         notification.open({
           message: "Xoá thành công!",
         });
@@ -116,27 +116,26 @@ export default function TypeCoach() {
   const handleClose = () => {
     setValues({
       open: false,
-      idUpdate: '',
+      idUpdate: "",
     });
     form.resetFields();
   };
 
   const onFinish = (data) => {
-    if(values.idUpdate) {
+    if (values.idUpdate) {
       TypeCoachApi.updateTypeCoach(data, values.idUpdate)
-      .then((res) => {
-        refetch();
-        notification.open({
-          message: "Cập nhật thành công",
+        .then((res) => {
+          refetch();
+          notification.open({
+            message: "Cập nhật thành công",
+          });
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Cập nhật thất bại",
+          });
         });
-      })
-      .catch((err) => {
-        notification.open({
-          message: "Cập nhật thất bại",
-        });
-      });
-    }
-    else {
+    } else {
       TypeCoachApi.addTypeCoach(data)
         .then((res) => {
           refetch(); // fetch lại data để lấy dữ liệu mới thêm vào
@@ -203,7 +202,7 @@ export default function TypeCoach() {
                 form="formTypeCoach"
                 style={{ backgroundColor: "#001c6b", color: "white" }}
               >
-               {values.idUpdate ? "Cập nhật" : "Tạo"}
+                {values.idUpdate ? "Cập nhật" : "Tạo"}
               </Button>
             </>,
           ]}

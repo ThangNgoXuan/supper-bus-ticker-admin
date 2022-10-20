@@ -109,7 +109,6 @@ export default function Place() {
   };
 
   const handleDelete = (record) => {
-    console.log(record);
     BoardingPointApi.deleteBoardingPoint(record._id)
       .then((res) => {
         refetch();
@@ -178,7 +177,7 @@ export default function Place() {
   return (
     <div className="p-typeCoach">
       <div>
-        <Title level={4}>Địa điểm đón khách</Title>
+        <Title level={4}>Địa điểm</Title>
       </div>
       <div className="p-typeCoach_typeCoach_header">
         <Button onClick={handleOpen} type="primary" size="large">
@@ -191,6 +190,7 @@ export default function Place() {
       </div>
       <div className="p-place_modalUpdate">
         <Modal
+          maskClosable={false}
           title={values.idUpdate ? "Cập nhật địa điểm" : "Tạo địa điểm mới"}
           visible={values.open}
           footer={[

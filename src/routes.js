@@ -67,7 +67,7 @@ const dashboardRoutes = [
     children: [
       {
         path: "/place",
-        name: "Địa điểm đón khách",
+        name: "Địa điểm",
         icon: <MdOutlinePlace />,
       },
       {
@@ -78,6 +78,11 @@ const dashboardRoutes = [
       {
         path: "/schedule",
         name: "Lịch chạy",
+        icon: <AiOutlineSchedule />,
+      },
+      {
+        path: "/trip-plan",
+        name: "Lịch trình",
         icon: <AiOutlineSchedule />,
       },
     ],

@@ -1,9 +1,13 @@
 import {
   Button,
+  Col,
   Form,
   Input,
+  InputNumber,
   Modal,
   notification,
+  Row,
+  Select,
   Table,
   Typography,
 } from "antd";
@@ -15,10 +19,11 @@ import { PlusOutlined } from "@ant-design/icons";
 import useValues from "../../hooks/useValues";
 
 export default function Routes() {
-  const { Title } = Typography;
+  const { Title, Text } = Typography;
+  const { Option } = Select;
   const [values, setValues] = useValues({
     open: false,
-  })
+  });
 
   /* eslint-disable-next-line */
   const [loading, data, _, fetch, refetch] = useFetch(
@@ -28,14 +33,14 @@ export default function Routes() {
 
   useEffect(() => {
     fetch({}, true);
-  /* eslint-disable-next-line */
+    /* eslint-disable-next-line */
   }, []);
 
   console.log(data);
 
   const columns = [
     {
-      title: "ID",
+      title: "STT",
       dataIndex: "_id",
       render: (index) => (
         <span>{(index = data.findIndex((x) => x._id === index) + 1)}</span>
@@ -48,25 +53,40 @@ export default function Routes() {
     },
     {
       title: "Điểm đầu",
-      dataIndex: "start",
-      key: "start",
+      dataIndex: "from",
+      key: "from",
+      render: (index) => {
+        return index?.name;
+      },
     },
     {
       title: "Điểm cuối",
-      dataIndex: "end",
-      key: "end",
+      dataIndex: "to",
+      key: "to",
+      render: (index) => {
+        return index?.name;
+      },
     },
     {
-      title: "Danh sách điểm đón",
+      title: "Lịch trình",
       dataIndex: "list",
       key: "list",
     },
     {
-      title: "Danh sách lịch trình",
-      dataIndex: "schedule",
-      key: "schedule",
+      title: "Thời gian",
+      dataIndex: "duration",
+      key: "duration",
     },
-
+    {
+      title: "Khoảng cách",
+      dataIndex: "distance",
+      key: "distance",
+    },
+    {
+      title: "Giá tiền",
+      dataIndex: "price",
+      key: "price",
+    },
     {
       dataIndex: "function",
       key: "function",
@@ -92,13 +112,13 @@ export default function Routes() {
   const handleOpen = () => {
     setValues({
       open: true,
-    })
+    });
   };
 
   const handleClose = () => {
     setValues({
-      open: false
-    })
+      open: false,
+    });
   };
 
   const onFinish = (data) => {
@@ -109,18 +129,16 @@ export default function Routes() {
     });
   };
 
-  const handleOpenUpdate = () => {
-
-  };
+  const handleOpenUpdate = () => {};
 
   return (
     <div className="p-typeCoach">
       <div>
-        <Title level={4}>Quản lí tuyến xe</Title>
+        <Title level={4}>Quản lí tuyến đường</Title>
       </div>
       <div className="p-typeCoach_typeCoach_header">
         <Button onClick={handleOpen} type="primary" size="large">
-        <PlusOutlined />
+          <PlusOutlined />
           Tạo mới
         </Button>
       </div>
@@ -135,25 +153,65 @@ export default function Routes() {
           maskClosable={false}
           footer={[
             <>
-              <Button onClick={handleClose}>Hủy</Button>
-              <Button form="formRouter" type="primary" htmlType="submit">
+              <Button
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+                onClick={handleClose}
+              >
+                Hủy
+              </Button>
+              <Button
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+                form="formRouter"
+                type="primary"
+                htmlType="submit"
+              >
                 Tạo
               </Button>
             </>,
           ]}
         >
-          <Form layout="" id="formRouter" onFinish={onFinish}>
+          <Form layout="vertical" id="formRouter" onFinish={onFinish}>
             <Form.Item name="name" label="Tên chuyến">
-              <Input placeholder="Vui lòng nhập tên chuyến" />
+              <Input placeholder="Nhập tên chuyến" />
             </Form.Item>
-            <Form.Item name="start" label="Điểm đầu">
-              <Input placeholder="Vui lòng nhập điểm đầu" />
-            </Form.Item>
-            <Form.Item name="end" label="Điểm cuối">
-              <Input placeholder="Vui lòng nhập điểm cuối" />
-            </Form.Item>
-            <Form.Item name="list" label="Điểm đón">
-              <Input placeholder="Vui lòng nhập điểm đón" />
+            <Row>
+              <Col span={11}>
+                <Form.Item name="start" label="Điểm đầu">
+                  <Input placeholder="Nhập điểm đầu" />
+                </Form.Item>
+              </Col>
+              <Col span={2}></Col>
+              <Col span={11}>
+                <Form.Item name="end" label="Điểm cuối">
+                  <Input placeholder="Nhập điểm cuối" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item name="distance" label="Khoảng cách:">
+                  <InputNumber />
+                  <Text> KM</Text>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name="duration" label="Thời gian:">
+                  <InputNumber />
+                  <Text> Phút</Text>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name="price" label="Giá tiền:">
+                  <InputNumber />
+                  <Text> VNĐ</Text>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item label="Lịch trình">
+              <Select>
+                <Option>Lịch trình 1</Option>
+                <Option>Lịch trình 2</Option>
+              </Select>
             </Form.Item>
           </Form>
         </Modal>
