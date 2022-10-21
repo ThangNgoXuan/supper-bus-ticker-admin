@@ -1,3 +1,4 @@
+import { PlusOutlined } from "@ant-design/icons";
 import { Button, notification, Table, Typography } from "antd";
 import React from "react";
 
@@ -57,11 +58,20 @@ export default function User() {
   });
 
   return (
-    <div className="p-user">
-      <div className="p-user_title">
-        <Title level={2}>Quản lí người dùng</Title>
+    <div className="p-typeCoach">
+      <div>
+        <Title level={4}>Tin tức:</Title>
       </div>
+      <div className="p-typeCoach_typeCoach_header">
+        <Button type="primary" size="large">
+          <PlusOutlined />
+          Tạo mới
+        </Button>
+      </div>
+      <div>
       <Table columns={columns} dataSource={data} />
+
+      </div>
     </div>
   );
 }
