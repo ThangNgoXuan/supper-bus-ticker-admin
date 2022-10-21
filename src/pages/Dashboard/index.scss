@@ -1,0 +1,13 @@
+.p-dashboard {
+    &_blog{
+        display: flex;
+        width: 100%;
+    }
+
+    &_blogItem {
+        max-width: 45%;
+        flex: 0 0 45%;
+        padding: rem(10);
+        margin: 0 !important;
+    }
+}

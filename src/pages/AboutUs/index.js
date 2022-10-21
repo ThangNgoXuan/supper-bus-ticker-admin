@@ -47,9 +47,10 @@ export default function AboutUs() {
   return (
     <div className="p-typeCoach">
       <div>
-        <Title level={4}></Title>
+        <Title level={4}>Quản lí trang về chúng tôi</Title>
       </div>
       <Form onFinish={onFinish} layout="vertical"
+        style={{marginTop: '20px'}}
         initialValues={{
           title: titleDefault,
           content: descriptionDefault,
@@ -66,7 +67,7 @@ export default function AboutUs() {
           ]}
         >
           <Input
-            placeholder="Vui lòng nhập tiêu đề"
+            placeholder="Nhập tiêu đề"
           />
         </Form.Item>
         <Form.Item
