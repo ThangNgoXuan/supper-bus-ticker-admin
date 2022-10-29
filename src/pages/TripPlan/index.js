@@ -96,14 +96,16 @@ export default function TripPlan() {
       dataIndex: "place",
       key: "place",
       render: (index) => {
-        {(index = data.find((e) => e._id === index))}
-        console.log('11223',index)
-      }
+        <span>{index?.label}</span>;
+      },
     },
     {
       title: "Loại",
       dataIndex: "type",
       key: "type",
+      render: (index) => {
+        <span>{index?.label}</span>;
+      },
     },
   ];
 
@@ -136,18 +138,16 @@ export default function TripPlan() {
   };
 
   const onSubmitPlace = (dataPlace) => {
-    console.log("qqqqqq", dataPlace);
+    console.log("data place", dataPlace);
     notification.open({
       message: "Cập nhật thành công",
     });
     setValues({
       listPoint: [dataPlace, ...values.listPoint],
     });
-    console.log("lispoint", values.listPoint);
   };
 
   const onSubmitMain = (dataMain) => {
-    console.log("main", dataMain);
     const data = { ...dataMain, listPoint: values.listPoint };
     console.log("main", data);
 
@@ -244,11 +244,15 @@ export default function TripPlan() {
             <Col span={1} />
             <Col span={12}>
               <Form.Item label="Địa điểm" name="place">
-                <Select name="place" defaultValue={data[0]?._id}>
+                <Select
+                  labelInValue
+                  name="place"
+                  defaultValue={{ key: data[0]?._id, label: data[0]?.name }}
+                >
                   {data &&
                     data.map((item) => (
-                      <Option value={item._id} key={item?._id}>
-                        {item.name}
+                      <Option value={item?._id} key={item?._id}>
+                        {item?.name}
                       </Option>
                     ))}
                 </Select>
@@ -257,10 +261,17 @@ export default function TripPlan() {
             <Col span={1} />
             <Col span={5}>
               <Form.Item name="type" label="Loại">
-                <Select name="type" defaultValue={dataType[0].key}>
+                <Select
+                  labelInValue
+                  name="type"
+                  defaultValue={{
+                    key: dataType[0].key,
+                    label: dataType[0]?.value,
+                  }}
+                >
                   {dataType.map((item) => (
-                    <Option value={item.key} key={item.key}>
-                      {item.value}
+                    <Option value={item?.key} key={item?.key}>
+                      {item?.value}
                     </Option>
                   ))}
                 </Select>
