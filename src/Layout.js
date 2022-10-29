@@ -4,7 +4,6 @@ import { Layout } from "antd";
 
 import Sider from "./components/Sider";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
 import dashboardRoutes from "./routes";
 import "./App.scss";
 import Dashboard from "./pages/Dashboard";
@@ -24,6 +23,7 @@ import Booking from "./pages/Booking";
 import Schema from "./pages/Schema";
 import TypeCoach from "./pages/TypeCoach";
 import TripPlan from "./pages/TripPlan";
+import Trips from "./pages/Trips";
 
 export default function MainLayout() {
   const { Content } = Layout;
@@ -54,9 +54,9 @@ export default function MainLayout() {
             <Route exact path="/schema" element={<Schema />} />
             <Route exact path="/trip-plan" element={<TripPlan />} />
             <Route exact path="/type-coach" element={<TypeCoach />} />
+            <Route exact path="/trips" element={<Trips />} />
           </Routes>
         </Content>
-        <Footer />
       </Layout>
     </Layout>
   );

@@ -1,4 +1,8 @@
 .p-typeCoach {
+    padding: rem(16) rem(20);
+    box-shadow: 0 0 5px 5px rgb(0 0 0 / 3%);
+    border-radius: rem(16);
+    background-color: $white;
     .ant-typography {
         text-align: left;
         font-weight: 600;

@@ -17,6 +17,7 @@ import { GiMassDriver } from "react-icons/gi";
 import { MdOutlinePlace, MdOutlineBorderColor } from "react-icons/md";
 import { TbRouter } from "react-icons/tb";
 import { BsCardList } from "react-icons/bs";
+import {SiTripdotcom} from "react-icons/si"
 
 const dashboardRoutes = [
   {
@@ -60,6 +61,11 @@ const dashboardRoutes = [
         icon: <UnorderedListOutlined />,
       },
     ],
+  },
+  {
+    path: "/trips",
+    name: "Quản lí chuyến xe",
+    icon: <SiTripdotcom />,
   },
   {
     name: "Tuyến",

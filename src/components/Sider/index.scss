@@ -13,18 +13,28 @@
   svg {
     height: rem(20);
     width: auto;
+    color: rgba($color: #000, $alpha: 0.6);
+  }
+
+  .ant-menu-title-content {
+    a {
+      color: rgba($color: #000, $alpha: 0.6) !important;
+    }
   }
 }
 
 .ant-menu-title-content {
   @include font-base();
+  color: rgba($color: #000, $alpha: 0.6) !important;
 }
 
 .ant-menu-item-icon,
 .ant-menu-submenu-title {
+  color: rgba($color: #000, $alpha: 0.6) !important;
   svg {
     height: rem(20);
     width: auto;
+    color: rgba($color: #000, $alpha: 0.6) !important;
   }
 }
 
@@ -34,6 +44,6 @@
 }
 
 .ant-layout-sider-trigger {
-    color: $black;
-    background-color: $anti-flash-white;
+  color: $white;
+  background-color: $cool-black;
 }
