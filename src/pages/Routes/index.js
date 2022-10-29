@@ -1,49 +1,91 @@
 import {
   Button,
+  Col,
   Form,
   Input,
+  InputNumber,
   Modal,
   notification,
+  Row,
+  Select,
   Table,
   Typography,
 } from "antd";
-import React, { useState } from "react";
+import React from "react";
+import useFetch from "../../hooks/useFetch";
+import routerApi from "../../api/routerApi";
+import { useEffect } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import useValues from "../../hooks/useValues";
 
 export default function Routes() {
-  const { Title } = Typography;
-  const [open, setOpen] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
+  const { Title, Text } = Typography;
+  const { Option } = Select;
+  const [values, setValues] = useValues({
+    open: false,
+  });
+
+  /* eslint-disable-next-line */
+  const [loading, data, _, fetch, refetch] = useFetch(
+    {},
+    routerApi.getAllRoute
+  );
+
+  useEffect(() => {
+    fetch({}, true);
+    /* eslint-disable-next-line */
+  }, []);
+
+  console.log(data);
 
   const columns = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
+      title: "STT",
+      dataIndex: "_id",
+      render: (index) => (
+        <span>{(index = data.findIndex((x) => x._id === index) + 1)}</span>
+      ),
     },
     {
       title: "Tuyến đường",
-      dataIndex: "route",
-      key: "route",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Điểm đầu",
-      dataIndex: "start",
-      key: "start",
+      dataIndex: "from",
+      key: "from",
+      render: (index) => {
+        return index?.name;
+      },
     },
     {
       title: "Điểm cuối",
-      dataIndex: "end",
-      key: "end",
+      dataIndex: "to",
+      key: "to",
+      render: (index) => {
+        return index?.name;
+      },
     },
     {
-      title: "Danh sách điểm đón",
+      title: "Lịch trình",
       dataIndex: "list",
       key: "list",
     },
     {
-      title: "Danh sách lịch trình",
-      dataIndex: "schedule",
-      key: "schedule",
+      title: "Thời gian",
+      dataIndex: "duration",
+      key: "duration",
+    },
+    {
+      title: "Khoảng cách",
+      dataIndex: "distance",
+      key: "distance",
+    },
+    {
+      title: "Giá tiền",
+      dataIndex: "price",
+      key: "price",
     },
     {
       dataIndex: "function",
@@ -68,11 +110,15 @@ export default function Routes() {
   };
 
   const handleOpen = () => {
-    setOpen(true);
+    setValues({
+      open: true,
+    });
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setValues({
+      open: false,
+    });
   };
 
   const onFinish = (data) => {
@@ -83,94 +129,89 @@ export default function Routes() {
     });
   };
 
-  const onFinishUpdate = (data) => {
-    console.log(data);
-    notification.open({
-      message: "Cập nhật thành công",
-    });
-    handleCloseUpdate();
-  };
-
-  const handleOpenUpdate = () => {
-    setOpenUpdate(true);
-  };
-
-  const handleCloseUpdate = () => {
-    setOpenUpdate(false);
-  };
-
-  const data = new Array(30).fill({
-    id: "1",
-    route: "Bình Dương => Bình Định",
-    start: "Bình Dương",
-    end: "Bình Định",
-    list: ["An Nhơn", "An Nhơn", "An Nhơn"],
-    schedule: ["08:00 -> 20:30", "08:00 -> 20:30"]
-  });
+  const handleOpenUpdate = () => {};
 
   return (
-    <div className="p-routes">
-      <div className="p-routes">
-        <Title level={2}>Quản lí tuyến xe</Title>
-        <Button onClick={handleOpen}>Tạo mới</Button>
+    <div className="p-typeCoach">
+      <div>
+        <Title level={4}>Quản lí tuyến đường</Title>
+      </div>
+      <div className="p-typeCoach_typeCoach_header">
+        <Button onClick={handleOpen} type="primary" size="large">
+          <PlusOutlined />
+          Tạo mới
+        </Button>
       </div>
       <div className="p-routes_table">
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} loading={loading} />
       </div>
       <div className="p-routes_modal">
         <Modal
           title="Tạo tuyến xe mới"
-          visible={open}
+          visible={values.open}
+          onCancel={handleClose}
+          maskClosable={false}
           footer={[
             <>
-              <Button onClick={handleClose}>Hủy</Button>
-              <Button form="formRouter" type="primary" htmlType="submit">
+              <Button
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+                onClick={handleClose}
+              >
+                Hủy
+              </Button>
+              <Button
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+                form="formRouter"
+                type="primary"
+                htmlType="submit"
+              >
                 Tạo
               </Button>
             </>,
           ]}
         >
-          <Form layout="" id="formRouter" onFinish={onFinish}>
+          <Form layout="vertical" id="formRouter" onFinish={onFinish}>
             <Form.Item name="name" label="Tên chuyến">
-              <Input placeholder="Vui lòng nhập tên chuyến" />
+              <Input placeholder="Nhập tên chuyến" />
             </Form.Item>
-            <Form.Item name="start" label="Điểm đầu">
-              <Input placeholder="Vui lòng nhập điểm đầu" />
-            </Form.Item>
-            <Form.Item name="end" label="Điểm cuối">
-              <Input placeholder="Vui lòng nhập điểm cuối" />
-            </Form.Item>
-            <Form.Item name="list" label="Điểm đón">
-              <Input placeholder="Vui lòng nhập điểm đón" />
-            </Form.Item>
-          </Form>
-        </Modal>
-      </div>
-      <div className="p-routes_modalUpdate">
-        <Modal
-          title="Cập nhật tuyến xe"
-          visible={openUpdate}
-          footer={[
-            <>
-              <Button onClick={handleCloseUpdate}>Hủy</Button>
-              <Button form="formRouterUpdate" type="primary" htmlType="submit">
-                Tạo
-              </Button>
-            </>,
-          ]}
-        >
-          <Form layout="" id="formRouterUpdate" onFinish={onFinishUpdate}>
-            <Form.Item name="name" label="Tên chuyến">
-              <Input placeholder="Vui lòng nhập tên chuyến" />
-            </Form.Item>
-            <Form.Item name="start" label="Điểm đầu">
-              <Input placeholder="Vui lòng nhập điểm đầu" />
-            </Form.Item>
-            <Form.Item name="end" label="Điểm cuối">
-              <Input placeholder="Vui lòng nhập điểm cuối" />
-            </Form.Item>
-            <Form.Item name="list" label="Điểm đón">
-              <Input placeholder="Vui lòng nhập điểm đón" />
+            <Row>
+              <Col span={11}>
+                <Form.Item name="start" label="Điểm đầu">
+                  <Input placeholder="Nhập điểm đầu" />
+                </Form.Item>
+              </Col>
+              <Col span={2}></Col>
+              <Col span={11}>
+                <Form.Item name="end" label="Điểm cuối">
+                  <Input placeholder="Nhập điểm cuối" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item name="distance" label="Khoảng cách:">
+                  <InputNumber />
+                  <Text> KM</Text>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name="duration" label="Thời gian:">
+                  <InputNumber />
+                  <Text> Phút</Text>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name="price" label="Giá tiền:">
+                  <InputNumber />
+                  <Text> VNĐ</Text>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item label="Lịch trình">
+              <Select>
+                <Option>Lịch trình 1</Option>
+                <Option>Lịch trình 2</Option>
+              </Select>
             </Form.Item>
           </Form>
         </Modal>

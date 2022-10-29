@@ -1,25 +1,46 @@
 import React, { useState } from "react";
 import {
   Button,
-  DatePicker,
   Form,
+  Image,
   Input,
   Modal,
   notification,
   Table,
   Typography,
 } from "antd";
-import moment from "moment";
-import { dateFormat } from "../../utils";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import useFetch from "../../hooks/useFetch";
+import useValues from "../../hooks/useValues";
+import newsApi from "../../api/newApi";
+import { useEffect } from "react";
+import { PlusOutlined } from "@ant-design/icons";
 
 export default function News() {
+  const [values, setValues] = useValues({
+    open: false,
+    idUpdate: "",
+  });
+
+  /* eslint-disable-next-line */
+  const [loading, data, _, fetch, refetch] = useFetch({}, newsApi.getAllNews);
+
+  useEffect(() => {
+    fetch({}, true);
+    /* eslint-disable-next-line */
+  }, []);
+
+  const { Title } = Typography;
+  const [form] = Form.useForm();
+
   const columns = [
     {
-      title: "Id",
-      dataIndex: "id",
-      key: "id",
+      title: "STT",
+      dataIndex: "_id",
+      render: (index) => (
+        <span>{(index = data.findIndex((x) => x._id === index) + 1)}</span>
+      ),
     },
     {
       title: "Tiêu đề",
@@ -27,24 +48,64 @@ export default function News() {
       key: "title",
     },
     {
+      title: "Thumbnail",
+      dataIndex: "thumbnail",
+      key: "thumbnail",
+      render: (index) => {
+        return (
+          <Image
+            src={index || "https://picsum.photos/50"}
+            style={{ height: "50px" }}
+          />
+        );
+      },
+    },
+    {
       title: "Ngày đăng",
-      dataIndex: "date",
-      key: "date",
+      dataIndex: "createdAt",
+      key: "createdAt",
     },
     {
       title: "Nội dung",
-      dataIndex: "content",
-      key: "content",
+      dataIndex: "subtitle",
+      key: "subtitle",
     },
     {
-      dataIndex: "function",
-      key: "function",
-      render: () => (
+      title: "Slug",
+      dataIndex: "slug",
+      key: "slug",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (index) => {
+        return index ? "Hiện" : "Ẩn";
+      },
+    },
+    {
+      title: "Order",
+      dataIndex: "order",
+      key: "order",
+    },
+    {
+      title: '',
+      render: (record) => (
         <div className="p-news_table_button">
-          <Button onClick={handleDelete} type="primary">
+          <Button
+            onClick={() => {
+              handleDelete(record);
+            }}
+            type="primary"
+          >
             Xóa
           </Button>
-          <Button onClick={showModalUpdate} type="primary">
+          <Button
+            onClick={() => {
+              handleOpenUpdate(record);
+            }}
+            type="primary"
+          >
             Cập nhật
           </Button>
         </div>
@@ -52,22 +113,37 @@ export default function News() {
     },
   ];
 
-  const listData = new Array(30).fill({
-    id: 1,
-    title: `Bài viết một`,
-    date: "20/09/2022",
-    content:
-      "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-  });
-
-  const { Title } = Typography;
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
-
   // HandleDelete
-  const handleDelete = () => {
-    notification.open({
-      message: "Xóa thành công",
+  const handleDelete = (record) => {
+    console.log(record)
+    newsApi
+      .deleteNew(record._id)
+      .then((res) => {
+        refetch();
+        notification.open({
+          message: "Xóa thành công",
+        });
+      })
+      .catch((err) => {
+        notification.open({
+          message: "Xóa thất bại",
+        });
+      });
+  };
+
+  const handleOpenUpdate = (record) => {
+    setValues({
+      open: true,
+      idUpdate: record._id,
+    });
+    form.setFieldsValue({
+      title: record.title,
+      subtitle: record.subtitle,
+      thumbnail: record.thumbnail,
+      content: record.content,
+      slug: record.slug,
+      order: record.order,
+      status: record.status,
     });
   };
 
@@ -88,191 +164,191 @@ export default function News() {
 
   // Modal Add New
   const showModal = () => {
-    setIsModalOpen(true);
+    setValues({
+      open: true,
+    });
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  const handleClose = () => {
+    setValues({
+      open: false,
+      idUpdate: "",
+    });
+    form.resetFields();
   };
 
   const submitNew = (data) => {
     console.log(data);
-    notification.open({
-      message: "Thêm thành công",
-    });
-    handleCancel();
-  };
+    if (values.idUpdate) {
+      newsApi
+        .updateNew(data, values.idUpdate)
+        .then((res) => {
+          refetch();
+          notification.open({
+            message: "Cập nhật thành công",
+          });
+        })
+        .catch((err) => {
+          console.log(data);
+          console.log('qq',values.idUpdate);
 
-  // Modal Update
-  const showModalUpdate = () => {
-    setIsModalUpdateOpen(true);
-  };
-
-  const handleCancelUpdate = () => {
-    setIsModalUpdateOpen(false);
-  };
-
-  const submitNewsUpdate = (data) => {
-    console.log(data);
-    notification.open({
-      message: "Cập nhật thành công",
-    });
-    handleCancelUpdate();
+          notification.open({
+            message: "Cập nhật thất bại",
+          });
+        });
+    } else {
+      newsApi
+        .addNew(data)
+        .then((res) => {
+          refetch();
+          notification.open({
+            message: "Thêm thành công",
+          });
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Thêm thất bại",
+          });
+        });
+    }
+    handleClose();
   };
 
   return (
-    <div className="p-news">
-      <div className="p-news_title">
+    <div className="p-typeCoach">
+      <div>
         <Title level={4}>Tin tức:</Title>
-        <Button type="primary" onClick={showModal}>
-          Thêm mới
+      </div>
+      <div className="p-typeCoach_typeCoach_header">
+        <Button type="primary" onClick={showModal} size="large">
+          <PlusOutlined />
+          Tạo mới
         </Button>
       </div>
       <div className="p-news_table">
         <Table
+          loading={loading}
           columns={columns}
-          dataSource={listData}
+          dataSource={data}
           pagination={tableParams.pagination}
           handleTableChange={handleTableChange}
-          onChange={(e) => console.log(e.current)}
         />
       </div>
       <div className="p-news_modal">
         <Modal
-          title="Thêm tin tức mới"
-          visible={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
+          title={values.idUpdate ? "Cập nhật tin tức" : "Thêm tin tức mới"}
+          visible={values.open}
+          onCancel={handleClose}
+          maskClosable={false}
           footer={[
             <>
-              <Button onClick={handleCancel}>Hủy</Button>
-              <Button htmlType="submit" form="formNew">
-                Tạo
+              <Button
+                onClick={handleClose}
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+              >
+                Hủy
+              </Button>
+              <Button
+                htmlType="submit"
+                form="formNew"
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+              >
+                {values.idUpdate ? "Cập nhật" : "Tạo"}
               </Button>
             </>,
           ]}
         >
-          <Form onFinish={submitNew} id="formNew">
-            <div className="p-news_modal_field">
-              <div className="p-news_modal_field-input">
-                <Title level={5}>Tiêu đề (*)</Title>
-                <Form.Item
-                  name="titel"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập tiêu đề",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Nhập tiêu đề(*)" />
-                </Form.Item>
-              </div>
-            </div>
-            <div className="p-news_modal_field">
-              <div className="p-news_modal_field-input">
-                <Title level={5}>Ngày tạo</Title>
-                <Form.Item name="date">
-                  <DatePicker
-                    defaultValue={moment("09/09/2022", dateFormat)}
-                    format={dateFormat}
-                  />
-                </Form.Item>
-              </div>
-            </div>
-            <div className="p-news_modal_field">
-              <div className="p-news_modal_field-textarea">
-                <Title level={5}>Nội dung bài viết (*)</Title>
-                <Form.Item
-                  name="content"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập tiêu đề",
-                    },
-                  ]}
-                  valuePropName="data"
-                  initialValue="nội dung bài viết"
-                  getValueFromEvent={(even, editor) => {
-                    const data = editor.getData();
-                    return data;
-                  }}
-                >
-                  <CKEditor editor={ClassicEditor} />
-                </Form.Item>
-              </div>
-            </div>
-          </Form>
-        </Modal>
-      </div>
-      <div className="p-modal_update">
-        <Modal
-          title="Cập nhật thông tin tin tức"
-          visible={isModalUpdateOpen}
-          onCancel={handleCancelUpdate}
-          footer={[
-            <>
-              <Button onClick={handleCancelUpdate}>Hủy</Button>
-              <Button htmlType="submit" form="formNewUpdate">
-                Cập nhật
-              </Button>
-            </>,
-          ]}
-        >
-          <Form onFinish={submitNewsUpdate} id="formNewUpdate">
-            <div className="p-news_modal_field">
-              <div className="p-news_modal_field-input">
-                <Title level={5}>Tiêu đề (*)</Title>
-                <Form.Item
-                  name="titel"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập tiêu đề",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Nhập tiêu đề(*)" />
-                </Form.Item>
-              </div>
-            </div>
-            <div className="p-news_modal_field">
-              <div className="p-news_modal_field-input">
-                <Title level={5}>Ngày tạo</Title>
-                <Form.Item name="date">
-                  <DatePicker
-                    defaultValue={moment("09/09/2022", dateFormat)}
-                    format={dateFormat}
-                  />
-                </Form.Item>
-              </div>
-            </div>
-            <div className="p-news_modal_field">
-              <div className="p-news_modal_field-textarea">
-                <Title level={5}>Nội dung bài viết (*)</Title>
-                <Form.Item
-                  name="content"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập tiêu đề",
-                    },
-                  ]}
-                  valuePropName="data"
-                  initialValue="nội dung bài viết"
-                  getValueFromEvent={(even, editor) => {
-                    const data = editor.getData();
-                    return data;
-                  }}
-                >
-                  <CKEditor editor={ClassicEditor} />
-                </Form.Item>
-              </div>
-            </div>
+          <Form onFinish={submitNew} form={form} id="formNew" layout="vertical">
+            <Form.Item
+              name="title"
+              label="Tiêu đề"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập tiêu đề",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập tiêu đề" />
+            </Form.Item>
+            <Form.Item
+              name="subtitle"
+              label="Tiêu đề"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập tiêu đề nhỏ",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập tiêu đề nhỏ" />
+            </Form.Item>
+            <Form.Item
+              name="thumbnail"
+              label="Thumbnail"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng thêm thumbnail",
+                },
+              ]}
+            >
+              <Input placeholder="Thêm thumbnail" />
+            </Form.Item>
+            <Form.Item
+              name="slug"
+              label="Slug"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập slug",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập slug" />
+            </Form.Item>
+            <Form.Item
+              name="status"
+              label="Trạng thái"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập ",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập " />
+            </Form.Item>
+            <Form.Item
+              name="order"
+              label="Order"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập ",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập " />
+            </Form.Item>
+            <Form.Item
+              name="content"
+              label="Nội dung"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập tiêu đề nhr",
+                },
+              ]}
+              valuePropName="data"
+              initialValue={form.content}
+              getValueFromEvent={(even, editor) => {
+                const data = editor.getData();
+                return data;
+              }}
+            >
+              <CKEditor editor={ClassicEditor} />
+            </Form.Item>
           </Form>
         </Modal>
       </div>

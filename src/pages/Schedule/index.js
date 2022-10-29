@@ -1,9 +1,20 @@
 import { Button, DatePicker, Table, Tabs, Typography } from "antd";
 import moment from "moment";
 import React from "react";
+import useValues from "../../hooks/useValues";
 import { dateFormat } from "../../utils";
 
+
+
 export default function Schedule() {
+  const defaultTo = new Date();
+  defaultTo.setDate(defaultTo.getDate() + 7);
+
+  const [values , setValues] = useValues({
+    from: new Date(),
+    to: defaultTo,
+  })
+
   const { Title } = Typography;
   const listSchedule = [
     {
@@ -76,9 +87,14 @@ export default function Schedule() {
 
   const { RangePicker } = DatePicker;
 
+  const qq = moment(new Date()).format("DD/MM/YYYY");
+  console.log("qq", qq, moment("2015/01/01", dateFormat));
+
   return (
-    <div className="p-schedule">
-      <Title level={2}>Đăng kí lịch chạy</Title>
+    <div className="p-typeCoach">
+      <div>
+      <Title level={4}>Đăng kí lịch chạy</Title>
+      </div>
       <div className="p-schedule_content">
         <Tabs tabPosition="left">
           {listSchedule.map((item, index) => (
@@ -88,16 +104,16 @@ export default function Schedule() {
             >
               <RangePicker
                 defaultValue={[
-                  moment("2015/01/01", dateFormat),
-                  moment("2015/01/01", dateFormat),
+                  moment(values.from, dateFormat),
+                  moment(values.to, dateFormat),
                 ]}
-                format={dateFormat}
+                // format={dateFormat}
               />
               <div className="p-schedule_content_div">
                 {item.list && (
                   <>
-                  <Table columns={columns} dataSource={item.list} />
-                  <Button>Cập nhật</Button>
+                    <Table columns={columns} dataSource={item.list} />
+                    <Button style={{color: 'white'}}>Cập nhật</Button>
                   </>
                 )}
               </div>

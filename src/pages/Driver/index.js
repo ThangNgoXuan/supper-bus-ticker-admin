@@ -25,7 +25,9 @@ export default function Driver() {
       key: "function",
       render: () => (
         <div className="p-news_table_button">
-          <Button onClick={handleDelete} type="primary">Xóa</Button>
+          <Button onClick={handleDelete} type="primary">
+            Xóa
+          </Button>
           <Button type="primary">Cập nhật</Button>
         </div>
       ),
@@ -34,9 +36,9 @@ export default function Driver() {
 
   const handleDelete = () => {
     notification.open({
-      message: 'Xóa thành công'
-    })
-  }
+      message: "Xóa thành công",
+    });
+  };
 
   const dataTableTicket = new Array(30).fill({
     id: "1",
@@ -44,14 +46,18 @@ export default function Driver() {
     status: "Bận",
   });
 
-  return (
-    <div className="p-driver">
-      <div className="p-driver_header">
-        <Title level={4}>Quản lí tài xế</Title>
+   return (
+    <div className="p-typeCoach">
+      <div>
+        <Title level={4}>Quản lí trang tài xế</Title>
       </div>
-      <div className="p-driver_title">
-        <Table columns={columns} dataSource={dataTableTicket} />
-      </div>
+      <Table
+        style={{
+          marginTop: "20px",
+        }}
+        columns={columns}
+        dataSource={dataTableTicket}
+      />
     </div>
   );
 }

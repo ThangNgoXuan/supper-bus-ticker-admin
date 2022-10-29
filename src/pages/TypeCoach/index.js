@@ -16,15 +16,12 @@ import useValues from "../../hooks/useValues";
 import useFetch from "../../hooks/useFetch";
 
 export default function TypeCoach() {
-  // useValues dùng thay thế khi có quá nhiều useState
   const [values, setValues] = useValues({
     open: false,
-    openUpdate: false,
     idUpdate: "",
   });
 
   const [form] = Form.useForm();
-  const [formUpdate] = Form.useForm();
 
   const { Title } = Typography;
   const { TextArea } = Input;
@@ -95,10 +92,10 @@ export default function TypeCoach() {
     },
   ];
 
-  const handleDeleteType = (record) => {
+  const   handleDeleteType = (record) => {
     TypeCoachApi.deleteTypeCoach(record._id)
       .then((res) => {
-        refetch(); // fetch lại data để lấy dữ liệu mới thêm vào
+        refetch();
         notification.open({
           message: "Xoá thành công!",
         });
@@ -119,59 +116,53 @@ export default function TypeCoach() {
   const handleClose = () => {
     setValues({
       open: false,
+      idUpdate: "",
     });
     form.resetFields();
   };
 
   const onFinish = (data) => {
-    TypeCoachApi.addTypeCoach(data)
-      .then((res) => {
-        refetch(); // fetch lại data để lấy dữ liệu mới thêm vào
-        notification.open({
-          message: "Tạo mới thành công",
+    if (values.idUpdate) {
+      TypeCoachApi.updateTypeCoach(data, values.idUpdate)
+        .then((res) => {
+          refetch();
+          notification.open({
+            message: "Cập nhật thành công",
+          });
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Cập nhật thất bại",
+          });
         });
-        form.resetFields();
-      })
-      .catch((err) => {
-        notification.open({
-          message: "Tạo mới thất bại",
+    } else {
+      TypeCoachApi.addTypeCoach(data)
+        .then((res) => {
+          refetch(); // fetch lại data để lấy dữ liệu mới thêm vào
+          notification.open({
+            message: "Tạo mới thành công",
+          });
+          form.resetFields();
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Tạo mới thất bại",
+          });
         });
-      });
+    }
     handleClose();
   };
 
   const handleOpenUpdate = (data) => {
     setValues({
-      openUpdate: true,
+      open: true,
       idUpdate: data._id,
     });
-    formUpdate.setFieldsValue({
+    form.setFieldsValue({
       name: data.name,
       number_of_seats: data.number_of_seats,
       description: data.description,
     });
-  };
-
-  const handleCloseUpdate = () => {
-    setValues({
-      openUpdate: false,
-    });
-  };
-
-  const onFinishUpdate = (data) => {
-    TypeCoachApi.updateTypeCoach(data, values.idUpdate)
-      .then((res) => {
-        refetch();
-        notification.open({
-          message: "Cập nhật thành công",
-        });
-      })
-      .catch((err) => {
-        notification.open({
-          message: "Cập nhật thất bại",
-        });
-      });
-    handleCloseUpdate();
   };
 
   return (
@@ -211,7 +202,7 @@ export default function TypeCoach() {
                 form="formTypeCoach"
                 style={{ backgroundColor: "#001c6b", color: "white" }}
               >
-                Tạo
+                {values.idUpdate ? "Cập nhật" : "Tạo"}
               </Button>
             </>,
           ]}
@@ -220,86 +211,6 @@ export default function TypeCoach() {
             onFinish={onFinish}
             form={form}
             id="formTypeCoach"
-            layout="vertical"
-          >
-            <Title level={5}>Thông tin chung</Title>
-            <Form.Item
-              label="Tên loại xe"
-              name="name"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập tên loại xe!",
-                },
-              ]}
-            >
-              <Input size="large" placeholder="Nhập loại xe" />
-            </Form.Item>
-            <Form.Item label="Sơ đồ ghế" name="schema">
-              <Select defaultValue="sd0" style={{ width: "100%" }} allowClear>
-                <Option value="sd0">Sơ đồ 1</Option>
-                <Option value="sd1">Sơ đồ 2</Option>
-                <Option value="sd2">Sơ đồ 3</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-              label="Số ghế"
-              name="number_of_seats"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập số ghế!",
-                },
-              ]}
-            >
-              <InputNumber
-                placeholder="Nhập số ghế (*)"
-                style={{ width: "100%" }}
-              />
-            </Form.Item>
-            <Form.Item
-              label="Mô tả"
-              name="description"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập mô tả!",
-                },
-              ]}
-            >
-              <TextArea placeholder="Nhập sơ đồ ghế (*)" rows={4} />
-            </Form.Item>
-          </Form>
-        </Modal>
-      </div>
-
-      <div className="p-typeCoach_modalTypeCoachUpdate">
-        <Modal
-          title="Cập nhật loại xe"
-          open={values.openUpdate}
-          onCancel={handleCloseUpdate}
-          footer={[
-            <>
-              <Button
-                style={{ backgroundColor: "#001c6b", color: "white" }}
-                onClick={handleCloseUpdate}
-              >
-                Hủy
-              </Button>
-              <Button
-                style={{ backgroundColor: "#001c6b", color: "white" }}
-                htmlType="submit"
-                form="formTypeCoachUpdate"
-              >
-                Cập nhật
-              </Button>
-            </>,
-          ]}
-        >
-          <Form
-            form={formUpdate}
-            onFinish={onFinishUpdate}
-            id="formTypeCoachUpdate"
             layout="vertical"
           >
             <Title level={5}>Thông tin chung</Title>
