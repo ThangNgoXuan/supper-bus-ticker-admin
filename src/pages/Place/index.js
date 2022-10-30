@@ -45,7 +45,7 @@ export default function Place() {
       ),
     },
     {
-      title: "Điểm đón",
+      title: "Tên điểm",
       dataIndex: "name",
       key: "name",
     },
@@ -53,11 +53,6 @@ export default function Place() {
       title: "Địa chỉ",
       dataIndex: "address",
       key: "address",
-    },
-    {
-      title: "Số điện thoại",
-      dataIndex: "phone",
-      key: "phone",
     },
     {
       title: "Kinh độ",
@@ -219,7 +214,7 @@ export default function Place() {
             layout="vertical"
           >
             <Form.Item
-              label="Điểm đón"
+              label="Tên điểm"
               name="name"
               rules={[
                 {
@@ -241,9 +236,6 @@ export default function Place() {
               ]}
             >
               <Input placeholder="Nhập địa chỉ" />
-            </Form.Item>
-            <Form.Item label="Số điện thoại" name="phone">
-              <Input placeholder="Nhập số điện thoại" />
             </Form.Item>
             <Form.Item
               label="Kinh độ"

@@ -20,6 +20,22 @@ import useFetch from "../../hooks/useFetch";
 import useValues from "../../hooks/useValues";
 import { hoursFormat } from "../../utils";
 
+const dataType = [
+  {
+    key: "start",
+    value: "Điểm đón",
+  },
+  {
+    key: "middle",
+    value: "Điểm dừng chân",
+  },
+  {
+    key: "end",
+    value: "Điểm trả",
+  },
+];
+
+
 export default function TripPlan() {
   const { Title } = Typography;
   const { Option } = Select;
@@ -109,20 +125,6 @@ export default function TripPlan() {
     },
   ];
 
-  const dataType = [
-    {
-      key: "start",
-      value: "Điểm đón",
-    },
-    {
-      key: "middle",
-      value: "Điểm dừng chân",
-    },
-    {
-      key: "end",
-      value: "Điểm trả",
-    },
-  ];
 
   const handleOpen = () => {
     setValues({

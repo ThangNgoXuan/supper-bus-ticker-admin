@@ -17,7 +17,7 @@ import { GiMassDriver } from "react-icons/gi";
 import { MdOutlinePlace, MdOutlineBorderColor } from "react-icons/md";
 import { TbRouter } from "react-icons/tb";
 import { BsCardList } from "react-icons/bs";
-import {SiTripdotcom} from "react-icons/si"
+import { SiTripdotcom } from "react-icons/si";
 
 const dashboardRoutes = [
   {
@@ -46,11 +46,6 @@ const dashboardRoutes = [
     icon: <CarOutlined />,
     children: [
       {
-        path: "/schema",
-        name: "Quản lí sơ đồ xe",
-        icon: <UnorderedListOutlined />,
-      },
-      {
         path: "/type-coach",
         name: "Quản lí loại xe",
         icon: <BsCardList />,
@@ -61,11 +56,6 @@ const dashboardRoutes = [
         icon: <UnorderedListOutlined />,
       },
     ],
-  },
-  {
-    path: "/trips",
-    name: "Quản lí chuyến xe",
-    icon: <SiTripdotcom />,
   },
   {
     name: "Tuyến",
@@ -81,21 +71,16 @@ const dashboardRoutes = [
         name: "Tuyến vận chuyển",
         icon: <TbRouter />,
       },
-      {
-        path: "/schedule",
-        name: "Lịch chạy",
-        icon: <AiOutlineSchedule />,
-      },
-      {
-        path: "/trip-plan",
-        name: "Lịch trình",
-        icon: <AiOutlineSchedule />,
-      },
     ],
   },
   {
+    path: "/trips",
+    name: "Quản lí chuyến xe",
+    icon: <SiTripdotcom />,
+  },
+  {
     path: "/driver",
-    name: "Quản lí tài xế",
+    name: "Quản lí nhân viên",
     icon: <GiMassDriver />,
   },
   {

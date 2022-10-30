@@ -74,11 +74,6 @@ export default function Coach() {
       key: "category_id",
     },
     {
-      title: "Tuyến vận chuyển",
-      dataIndex: "schedule",
-      key: "schedule",
-    },
-    {
       title: "Số ghế",
       dataIndex: "number_of_seats",
       key: "number_of_seats",

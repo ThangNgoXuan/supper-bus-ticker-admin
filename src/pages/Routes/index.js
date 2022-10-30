@@ -8,6 +8,7 @@ import {
   notification,
   Row,
   Select,
+  Space,
   Table,
   Typography,
 } from "antd";
@@ -17,12 +18,16 @@ import routerApi from "../../api/routerApi";
 import { useEffect } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import useValues from "../../hooks/useValues";
+import BoardingPointApi from "../../api/boardingPoint";
 
 export default function Routes() {
   const { Title, Text } = Typography;
   const { Option } = Select;
+  const [form, formPlace] = Form.useForm();
   const [values, setValues] = useValues({
     open: false,
+    idUpdate: "",
+    listPoint: [],
   });
 
   /* eslint-disable-next-line */
@@ -31,12 +36,34 @@ export default function Routes() {
     routerApi.getAllRoute
   );
 
+  /* eslint-disable-next-line */
+  const [loadingPoint, dataPoint, _Point, fetchPoint, refetchPoint] = useFetch(
+    {},
+    BoardingPointApi.getAllBoardingPoint
+  );
+
   useEffect(() => {
     fetch({}, true);
+    fetchPoint({}, true);
     /* eslint-disable-next-line */
   }, []);
 
-  console.log(data);
+  console.log("point", dataPoint);
+
+  const dataType = [
+    {
+      key: "start",
+      value: "Điểm đón",
+    },
+    {
+      key: "middle",
+      value: "Điểm dừng chân",
+    },
+    {
+      key: "end",
+      value: "Điểm trả",
+    },
+  ];
 
   const columns = [
     {
@@ -68,9 +95,14 @@ export default function Routes() {
       },
     },
     {
-      title: "Lịch trình",
-      dataIndex: "list",
-      key: "list",
+      title: "Các điểm dừng",
+      dataIndex: "points",
+      key: "points",
+      render: (index) => {
+        return index.map((ele) => {
+          return <span key={ele?._id}>{ele?.point?.name},</span>;
+        });
+      },
     },
     {
       title: "Thời gian",
@@ -83,16 +115,10 @@ export default function Routes() {
       key: "distance",
     },
     {
-      title: "Giá tiền",
-      dataIndex: "price",
-      key: "price",
-    },
-    {
-      dataIndex: "function",
-      key: "function",
-      render: () => (
+      title: "",
+      render: (record) => (
         <div className="p-news_table_button">
-          <Button onClick={handleDelete} type="primary">
+          <Button onClick={() => handleDelete(record)} type="primary">
             Xóa
           </Button>
           <Button onClick={handleOpenUpdate} type="primary">
@@ -103,10 +129,60 @@ export default function Routes() {
     },
   ];
 
-  const handleDelete = () => {
+  const columnsPlan = [
+    {
+      title: "Địa điểm",
+      dataIndex: "point",
+      key: "point",
+      // render: (index) => {
+      //   <span>{index?.label}</span>;
+      // },
+    },
+    {
+      title: "Loại",
+      dataIndex: "type",
+      key: "type",
+      // render: (index) => {
+      //   <span>{index?.label}</span>;
+      // },
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "duration",
+      key: "duration",
+    },
+    {
+      title: "Khoảng cách",
+      dataIndex: "distance",
+      key: "distance",
+    },  
+  ];
+
+  const onSubmitPlace = (dataPlace) => {
+    console.log("data place", dataPlace);
     notification.open({
-      message: "Xóa thành công",
+      message: "Cập nhật thành công",
     });
+    setValues({
+      listPoint: [dataPlace, ...values.listPoint],
+    });
+  };
+
+  const handleDelete = (record) => {
+    console.log("id", record._id);
+    routerApi
+      .deleteRoute(record._id)
+      .then((res) => {
+        refetch();
+        notification.open({
+          message: "Xóa thành công",
+        });
+      })
+      .catch((err) => {
+        notification.open({
+          message: "Xóa thất bại!",
+        });
+      });
   };
 
   const handleOpen = () => {
@@ -127,6 +203,38 @@ export default function Routes() {
     notification.open({
       message: "Tạo thành công",
     });
+    if (values.idUpdate) {
+      routerApi
+        .updateTypeCoach(data, values.idUpdate)
+        .then((res) => {
+          refetch();
+          notification.open({
+            message: "Cập nhật thành công",
+          });
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Cập nhật thất bại",
+          });
+        });
+    } else {
+      data.points = values.listPoint;
+      console.log("dataaa", data);
+      routerApi
+        .createRouter(data)
+        .then((res) => {
+          refetch();
+          notification.open({
+            message: "Tạo mới thành công",
+          });
+          form.resetFields();
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Tạo mới thất bại",
+          });
+        });
+    }
   };
 
   const handleOpenUpdate = () => {};
@@ -147,6 +255,7 @@ export default function Routes() {
       </div>
       <div className="p-routes_modal">
         <Modal
+          width={"50%"}
           title="Tạo tuyến xe mới"
           visible={values.open}
           onCancel={handleClose}
@@ -170,50 +279,187 @@ export default function Routes() {
             </>,
           ]}
         >
-          <Form layout="vertical" id="formRouter" onFinish={onFinish}>
-            <Form.Item name="name" label="Tên chuyến">
+          <Form
+            form={form}
+            layout="vertical"
+            id="formRouter"
+            onFinish={onFinish}
+            initialValues={{
+              name: "",
+              from: dataPoint[0]?._id,
+              to: dataPoint[1]?._id,
+              distance: 200,
+              duration: 300,
+            }}
+          >
+            <Form.Item
+              name="name"
+              label="Tên tuyến"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập tên tuyến!",
+                },
+              ]}
+            >
               <Input placeholder="Nhập tên chuyến" />
             </Form.Item>
             <Row>
               <Col span={11}>
-                <Form.Item name="start" label="Điểm đầu">
-                  <Input placeholder="Nhập điểm đầu" />
+                <Form.Item name="from" label="Điểm đầu">
+                  <Select>
+                    {dataPoint &&
+                      dataPoint.map((ele) => (
+                        <Option key={ele?._id} values={ele?._id}>
+                          {ele?.name}
+                        </Option>
+                      ))}
+                  </Select>
                 </Form.Item>
               </Col>
               <Col span={2}></Col>
               <Col span={11}>
-                <Form.Item name="end" label="Điểm cuối">
-                  <Input placeholder="Nhập điểm cuối" />
+                <Form.Item name="to" label="Điểm cuối">
+                  <Select>
+                    {dataPoint &&
+                      dataPoint.map((ele) => (
+                        <Option key={ele?._id} values={ele?._id}>
+                          {ele?.name}
+                        </Option>
+                      ))}
+                  </Select>
                 </Form.Item>
               </Col>
             </Row>
             <Row>
-              <Col span={8}>
-                <Form.Item name="distance" label="Khoảng cách:">
-                  <InputNumber />
+              <Col span={10}>
+                <Space>
+                  <Form.Item
+                    name="distance"
+                    label="Khoảng cách:"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập khoảng cách!",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      style={{
+                        width: "100%",
+                      }}
+                      placeholder="Nhập giá vé"
+                    />
+                  </Form.Item>
                   <Text> KM</Text>
-                </Form.Item>
+                </Space>
               </Col>
-              <Col span={8}>
-                <Form.Item name="duration" label="Thời gian:">
-                  <InputNumber />
+              <Col span={3} />
+              <Col span={10}>
+                <Space>
+                  <Form.Item
+                    name="duration"
+                    label="Thời gian:"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập thời gian!",
+                      },
+                    ]}
+                  >
+                    <InputNumber />
+                  </Form.Item>
                   <Text> Phút</Text>
+                </Space>
+              </Col>
+            </Row>
+          </Form>
+          <Title level={5}>Thêm điểm dừng</Title>
+          <Form
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+            id="formTypeCoach"
+            form={formPlace}
+            onFinish={onSubmitPlace}
+            layout="vertical"
+            initialValues={{
+              duration: 30,
+              distance: 30,
+              point: dataPoint[0]?._id,
+              type: dataType[0].key,
+            }}
+          >
+            <Row>
+              <Col span={11}>
+                <Form.Item label="Điểm dừng" name="point">
+                  <Select
+                    labelInValue
+                    name="point"
+                    defaultValue={{
+                      key: dataPoint[0]?._id,
+                      label: dataPoint[0]?.name,
+                    }}
+                  >
+                    {dataPoint &&
+                      dataPoint.map((item) => (
+                        <Option value={item?._id} key={item?._id}>
+                          {item?.name}
+                        </Option>
+                      ))}
+                  </Select>
                 </Form.Item>
               </Col>
-              <Col span={8}>
-                <Form.Item name="price" label="Giá tiền:">
-                  <InputNumber />
-                  <Text> VNĐ</Text>
+              <Col span={2} />
+              <Col span={5}>
+                <Form.Item name="type" label="Loại">
+                  <Select
+                    labelInValue
+                    name="type"
+                    defaultValue={{
+                      key: dataType[0].key,
+                      label: dataType[0]?.value,
+                    }}
+                  >
+                    {dataType.map((item) => (
+                      <Option value={item?.key} key={item?.key}>
+                        {item?.value}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item label="Lịch trình">
-              <Select>
-                <Option>Lịch trình 1</Option>
-                <Option>Lịch trình 2</Option>
-              </Select>
-            </Form.Item>
+            <Row>
+              <Col span={11}>
+                <Form.Item label="Thời gian đến điểm đầu" name="duration">
+                  <InputNumber />
+                </Form.Item>
+              </Col>
+              <Col span={2} />
+              <Col span={11}>
+                <Form.Item label="Khoảng cách đến điểm đầu" name="distance">
+                  <InputNumber />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Button
+              size="large"
+              style={{ backgroundColor: "#001c6b", color: "white" }}
+              form="formTypeCoach"
+              htmlType="submit"
+            >
+              <PlusOutlined />
+            </Button>
           </Form>
+          <Table
+            style={{ marginTop: "20px" }}
+            pagination={false}
+            columns={columnsPlan}
+            dataSource={values.listPoint}
+          />
         </Modal>
       </div>
     </div>

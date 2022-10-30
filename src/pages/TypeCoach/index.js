@@ -14,6 +14,7 @@ import React, { useEffect } from "react";
 import TypeCoachApi from "../../api/typeCoach";
 import useValues from "../../hooks/useValues";
 import useFetch from "../../hooks/useFetch";
+import SeatSchemaApi from "../../api/seatSchemaApi";
 
 export default function TypeCoach() {
   const [values, setValues] = useValues({
@@ -33,9 +34,19 @@ export default function TypeCoach() {
     TypeCoachApi.getAllTypeCoach
   );
 
+  /* eslint-disable-next-line */
+  const [
+    loadingSeatSchema,
+    dataSeatSchema,
+    _SeatSchema,
+    fetchSeatSchema,
+    refetchSeatSchema,
+  ] = useFetch({}, SeatSchemaApi.getAllSeatSchema);
+
   useEffect(() => {
     //call api lấy data typecoach
     fetch({}, true);
+    fetchSeatSchema({}, true);
     /* eslint-disable-next-line */
   }, []);
 
@@ -54,6 +65,11 @@ export default function TypeCoach() {
     },
     {
       title: "Sơ đồ ghế",
+      dataIndex: "seat_diagram",
+      key: "seat_diagram",
+    },
+    {
+      title: "Loại ghế",
       dataIndex: "seat_diagram",
       key: "seat_diagram",
     },
@@ -92,7 +108,7 @@ export default function TypeCoach() {
     },
   ];
 
-  const   handleDeleteType = (record) => {
+  const handleDeleteType = (record) => {
     TypeCoachApi.deleteTypeCoach(record._id)
       .then((res) => {
         refetch();
@@ -138,7 +154,7 @@ export default function TypeCoach() {
     } else {
       TypeCoachApi.addTypeCoach(data)
         .then((res) => {
-          refetch(); // fetch lại data để lấy dữ liệu mới thêm vào
+          refetch();
           notification.open({
             message: "Tạo mới thành công",
           });
@@ -162,6 +178,7 @@ export default function TypeCoach() {
       name: data.name,
       number_of_seats: data.number_of_seats,
       description: data.description,
+      seat_diagram: data.seat_diagram,
     });
   };
 
@@ -212,6 +229,12 @@ export default function TypeCoach() {
             form={form}
             id="formTypeCoach"
             layout="vertical"
+            initialValues={{
+              name: "",
+              seat_diagram: dataSeatSchema[0]?.id,
+              number_of_seats: 30,
+              description: "",
+            }}
           >
             <Title level={5}>Thông tin chung</Title>
             <Form.Item
@@ -226,11 +249,14 @@ export default function TypeCoach() {
             >
               <Input size="large" placeholder="Nhập loại xe" />
             </Form.Item>
-            <Form.Item label="Sơ đồ ghế" name="schema">
-              <Select defaultValue="sd0" style={{ width: "100%" }} allowClear>
-                <Option value="sd0">Sơ đồ 1</Option>
-                <Option value="sd1">Sơ đồ 2</Option>
-                <Option value="sd2">Sơ đồ 3</Option>
+            <Form.Item label="Sơ đồ ghế" name="seat_diagram">
+              <Select>
+                {dataSeatSchema &&
+                  dataSeatSchema.map((ele) => (
+                    <Option values={ele?.id} key={ele?.id}>
+                      {ele?.name}
+                    </Option>
+                  ))}
               </Select>
             </Form.Item>
             <Form.Item
