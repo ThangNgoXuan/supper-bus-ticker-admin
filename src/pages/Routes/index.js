@@ -48,19 +48,13 @@ export default function Routes() {
     /* eslint-disable-next-line */
   }, []);
 
-  console.log("point", dataPoint);
-
   const dataType = [
     {
-      key: "start",
+      key: "pick",
       value: "Điểm đón",
     },
     {
-      key: "middle",
-      value: "Điểm dừng chân",
-    },
-    {
-      key: "end",
+      key: "drop",
       value: "Điểm trả",
     },
   ];
@@ -121,7 +115,9 @@ export default function Routes() {
           <Button onClick={() => handleDelete(record)} type="primary">
             Xóa
           </Button>
-          <Button onClick={handleOpenUpdate} type="primary">
+          <Button onClick={() => {
+            handleOpenUpdate(record);
+          }} type="primary">
             Cập nhật
           </Button>
         </div>
@@ -155,14 +151,10 @@ export default function Routes() {
       title: "Khoảng cách",
       dataIndex: "distance",
       key: "distance",
-    },  
+    },
   ];
 
   const onSubmitPlace = (dataPlace) => {
-    console.log("data place", dataPlace);
-    notification.open({
-      message: "Cập nhật thành công",
-    });
     setValues({
       listPoint: [dataPlace, ...values.listPoint],
     });
@@ -191,21 +183,37 @@ export default function Routes() {
     });
   };
 
+  const handleOpenUpdate = (data) => {
+    console.log("data",data)
+    setValues({
+      open: true,
+      idUpdate: data._id,
+      listPoint: [],
+    })
+
+    form.setFieldsValue({
+      name: data.name,
+      from: data.from._id,
+      to: data.to._id,
+      distance: data.distance,
+      duration: data.duration,
+    })
+  }
+
   const handleClose = () => {
     setValues({
       open: false,
+      listPoint: [],
+      idUpdate: ""
     });
+    form.resetFields();
   };
 
   const onFinish = (data) => {
     console.log(data);
-    handleClose();
-    notification.open({
-      message: "Tạo thành công",
-    });
     if (values.idUpdate) {
       routerApi
-        .updateTypeCoach(data, values.idUpdate)
+        .updateRoute(data, values.idUpdate)
         .then((res) => {
           refetch();
           notification.open({
@@ -219,7 +227,6 @@ export default function Routes() {
         });
     } else {
       data.points = values.listPoint;
-      console.log("dataaa", data);
       routerApi
         .createRouter(data)
         .then((res) => {
@@ -235,9 +242,8 @@ export default function Routes() {
           });
         });
     }
+    handleClose();
   };
-
-  const handleOpenUpdate = () => {};
 
   return (
     <div className="p-typeCoach">
@@ -256,7 +262,7 @@ export default function Routes() {
       <div className="p-routes_modal">
         <Modal
           width={"50%"}
-          title="Tạo tuyến xe mới"
+          title={values.idUpdate ? "Cập nhật chuyến xe" : "Tạo chuyến xe mới"}
           visible={values.open}
           onCancel={handleClose}
           maskClosable={false}
@@ -274,7 +280,7 @@ export default function Routes() {
                 type="primary"
                 htmlType="submit"
               >
-                Tạo
+                {values.idUpdate ? "Cập nhật" : "Tạo" }
               </Button>
             </>,
           ]}
@@ -288,8 +294,8 @@ export default function Routes() {
               name: "",
               from: dataPoint[0]?._id,
               to: dataPoint[1]?._id,
-              distance: 200,
-              duration: 300,
+              distance: 0,
+              duration: 0,
             }}
           >
             <Form.Item
@@ -386,8 +392,8 @@ export default function Routes() {
             onFinish={onSubmitPlace}
             layout="vertical"
             initialValues={{
-              duration: 30,
-              distance: 30,
+              duration: 0,
+              distance: 0,
               point: dataPoint[0]?._id,
               type: dataType[0].key,
             }}
@@ -396,11 +402,11 @@ export default function Routes() {
               <Col span={11}>
                 <Form.Item label="Điểm dừng" name="point">
                   <Select
-                    labelInValue
+                    // labelInValue
                     name="point"
                     defaultValue={{
                       key: dataPoint[0]?._id,
-                      label: dataPoint[0]?.name,
+                      // label: dataPoint[0]?.name,
                     }}
                   >
                     {dataPoint &&
@@ -413,14 +419,14 @@ export default function Routes() {
                 </Form.Item>
               </Col>
               <Col span={2} />
-              <Col span={5}>
+              <Col span={11}>
                 <Form.Item name="type" label="Loại">
                   <Select
-                    labelInValue
+                    // labelInValue
                     name="type"
                     defaultValue={{
                       key: dataType[0].key,
-                      label: dataType[0]?.value,
+                      // label: dataType[0]?.value,
                     }}
                   >
                     {dataType.map((item) => (
