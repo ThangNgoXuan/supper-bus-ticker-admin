@@ -115,9 +115,12 @@ export default function Routes() {
           <Button onClick={() => handleDelete(record)} type="primary">
             Xóa
           </Button>
-          <Button onClick={() => {
-            handleOpenUpdate(record);
-          }} type="primary">
+          <Button
+            onClick={() => {
+              handleOpenUpdate(record);
+            }}
+            type="primary"
+          >
             Cập nhật
           </Button>
         </div>
@@ -130,17 +133,19 @@ export default function Routes() {
       title: "Địa điểm",
       dataIndex: "point",
       key: "point",
-      // render: (index) => {
-      //   <span>{index?.label}</span>;
-      // },
+      render: (index) => {
+        const b = dataPoint.find(ele => ele._id === index)
+        return <span>{b?.name}</span>
+      }
     },
     {
       title: "Loại",
       dataIndex: "type",
       key: "type",
-      // render: (index) => {
-      //   <span>{index?.label}</span>;
-      // },
+      render: (index) => {
+        const b = dataType.find(ele => ele.key === index)
+        return <span>{b?.value}</span>
+      }
     },
     {
       title: "Thời gian",
@@ -161,7 +166,6 @@ export default function Routes() {
   };
 
   const handleDelete = (record) => {
-    console.log("id", record._id);
     routerApi
       .deleteRoute(record._id)
       .then((res) => {
@@ -184,12 +188,11 @@ export default function Routes() {
   };
 
   const handleOpenUpdate = (data) => {
-    console.log("data",data)
     setValues({
       open: true,
       idUpdate: data._id,
       listPoint: [],
-    })
+    });
 
     form.setFieldsValue({
       name: data.name,
@@ -197,21 +200,21 @@ export default function Routes() {
       to: data.to._id,
       distance: data.distance,
       duration: data.duration,
-    })
-  }
+    });
+  };
 
   const handleClose = () => {
     setValues({
       open: false,
       listPoint: [],
-      idUpdate: ""
+      idUpdate: "",
     });
     form.resetFields();
   };
 
   const onFinish = (data) => {
-    console.log(data);
     if (values.idUpdate) {
+      data.points = values.listPoint;
       routerApi
         .updateRoute(data, values.idUpdate)
         .then((res) => {
@@ -280,7 +283,7 @@ export default function Routes() {
                 type="primary"
                 htmlType="submit"
               >
-                {values.idUpdate ? "Cập nhật" : "Tạo" }
+                {values.idUpdate ? "Cập nhật" : "Tạo"}
               </Button>
             </>,
           ]}

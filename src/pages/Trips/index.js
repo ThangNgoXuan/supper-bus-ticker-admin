@@ -4,6 +4,7 @@ import {
   Col,
   DatePicker,
   Form,
+  Input,
   InputNumber,
   Modal,
   notification,
@@ -30,7 +31,7 @@ export default function Trips() {
 
   const [form] = Form.useForm();
   const { Option } = Select;
-  const { Title, Text } = Typography;
+  const { Title } = Typography;
 
   /* eslint-disable-next-line */
   const [loadingRoute, dataRoute, _Route, fetchRoute, refetchRoute] = useFetch(
@@ -63,6 +64,11 @@ export default function Trips() {
       render: (index) => (
         <span>{(index = dataTrip.findIndex((x) => x._id === index) + 1)}</span>
       ),
+    },
+    {
+      title: "Mã chuyến xe",
+      dataIndex: "id",
+      key: "id",
     },
     {
       title: "Tuyến đường",
@@ -111,18 +117,21 @@ export default function Trips() {
       render: (record) => (
         <div className="p-recruit_table_button">
           <Button type="primary">Xuất bến</Button>
-          <Button type="primary">Cập nhật</Button>
+          <Button type="primary" onClick={() => handleOpenUpdate(record)}>
+            Cập nhật
+          </Button>
         </div>
       ),
     },
   ];
 
-  console.log("trip", dataTrip);
-
   const handleClose = () => {
     setValues({
       open: false,
+      idUpdate: "",
     });
+
+    form.resetFields();
   };
 
   const handleOpen = () => {
@@ -131,11 +140,26 @@ export default function Trips() {
     });
   };
 
+  const handleOpenUpdate = (data) => {
+    console.log("Qq", data);
+    setValues({
+      open: true,
+      idUpdate: data._id,
+    });
+
+    form.setFieldsValue({
+      route: data.route,
+      vehicle: data.vehicle,
+      price: data.price,
+      accept_start: data.accept_start,
+      id: data.id,
+      // start: data.start.intend_time,
+    });
+  };
+
   const handleSubmit = (data) => {
-    console.log(data);
-    // handleClose();
+    console.log("create", data);
     if (values.idUpdate) {
-      console.log("Cạp nhât");
     } else {
       data.start = { intend_time: data.start };
       data.seat_diagram = "n_bunk_34";
@@ -205,9 +229,10 @@ export default function Trips() {
           initialValues={{
             route: dataRoute[0]?._id,
             vehicle: dataVehicle[0]?._id,
-            price: 200000,
+            price: 0,
             accept_start: false,
             start: moment(new Date(), dateFormat),
+            id: ""
           }}
         >
           <Form.Item label="Chọn tuyến xe" name="route">
@@ -219,6 +244,18 @@ export default function Trips() {
                   </Option>
                 ))}
             </Select>
+          </Form.Item>
+          <Form.Item
+            label="Mã chuyến"
+            name="id"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập mã chuyến",
+              },
+            ]}
+          >
+            <Input placeholder="Nhập mã chuyến" />
           </Form.Item>
           <Row>
             <Col span={10}>

@@ -9,32 +9,42 @@ import {
   Input,
   Select,
   Image,
-  InputNumber,
 } from "antd";
 import React from "react";
 import { useEffect } from "react";
 import CoachApi from "../../api/coachApi";
+import TypeCoachApi from "../../api/typeCoach";
 import useFetch from "../../hooks/useFetch";
 import useValues from "../../hooks/useValues";
 
 export default function Coach() {
   const { Title } = Typography;
-  const [valuse, setValues] = useValues({
+  const [values, setValues] = useValues({
     open: false,
+    idUpdate: "",
   });
 
   const { TextArea } = Input;
   const [form] = Form.useForm();
-
+  const { Option } = Select;
   /* eslint-disable-next-line */
   const [loading, data, _, fetch, refetch] = useFetch({}, CoachApi.getAllCoach);
+  const [
+    /* eslint-disable-next-line */
+    loadingTypeCoach,
+    dataTypeCoach,
+    /* eslint-disable-next-line */
+    _TypeCoach,
+    fetchTypeCoach,
+    /* eslint-disable-next-line */
+    refetchTypeCoach,
+  ] = useFetch({}, TypeCoachApi.getAllTypeCoach);
 
   useEffect(() => {
     fetch({}, true);
+    fetchTypeCoach({}, true);
     /* eslint-disable-next-line */
   }, []);
-
-  console.log(data);
 
   const columns = [
     {
@@ -55,7 +65,7 @@ export default function Coach() {
       // key: "image",
       render: () => (
         <Image
-          src="https://picsum.photo/20"
+          src="https://picsum.photos/20"
           style={{
             width: "50px",
             height: "50px",
@@ -74,24 +84,18 @@ export default function Coach() {
       key: "category_id",
     },
     {
-      title: "Số ghế",
-      dataIndex: "number_of_seats",
-      key: "number_of_seats",
-    },
-    {
       title: "Mô tả",
       dataIndex: "description",
       key: "description",
     },
     {
-      dataIndex: "function",
-      key: "function",
-      render: () => (
+      dataIndex: "",
+      render: (record) => (
         <div className="p-news_table_button">
-          <Button type="primary" onClick={handleDelete}>
+          <Button type="primary" onClick={() => handleDelete(record)}>
             Xóa
           </Button>
-          <Button type="primary" onClick={handleOpenUpdate}>
+          <Button type="primary" onClick={() => handleOpenUpdate(record)}>
             Cập nhật
           </Button>
         </div>
@@ -99,10 +103,21 @@ export default function Coach() {
     },
   ];
 
-  const handleDelete = () => {
-    notification.open({
-      message: "Xóa thành công",
-    });
+  const handleDelete = (record) => {
+    console.log("id", record._id);
+    CoachApi.deleteCoach(record._id)
+      .then((res) => {
+        refetch();
+        notification.open({
+          message: "Xóa thành công",
+        });
+      })
+      .catch((err) => {
+        console.log("qqq",err);
+        notification.open({
+          message: "Xóa thất bại!",
+        });
+      });
   };
 
   const handleOpen = () => {
@@ -114,35 +129,56 @@ export default function Coach() {
   const handleClose = () => {
     setValues({
       open: false,
+      idUpdate: "",
     });
     form.resetFields();
   };
 
   const onFinish = (data) => {
-    const dd = {status: true, ...data, category_id: "631df726c48332886a21bc5d"}
-    CoachApi.createCoach(dd)
-      .then((res) => {
-        refetch();
-        notification.open({
-          message: "Thêm thành công",
+    if (values.idUpdate) {
+      CoachApi.updateCoach(data, values.idUpdate)
+        .then((res) => {
+          refetch();
+          notification.open({
+            message: "Cập nhật thành công",
+          });
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Cập nhật thất bại",
+          });
         });
-      })
-      .catch((err) => {
-        notification.open({
-          message: "Thêm thất bại",
+    } else {
+      data.number_of_seats = 50;
+      CoachApi.createCoach(data)
+        .then((res) => {
+          refetch();
+          notification.open({
+            message: "Thêm thành công",
+          });
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Thêm thất bại",
+          });
         });
-      });
+    }
     handleClose();
   };
 
-  const handleOpenUpdate = () => {};
-
-  // Pull Down
-  const { Option } = Select;
-
-  const onChange = (value) => {};
-
-  const onSearch = (value) => {};
+  const handleOpenUpdate = (data) => {
+    setValues({
+      open: true,
+      idUpdate: data._id,
+    });
+    form.setFieldsValue({
+      images: data.images,
+      name: data.name,
+      license_plate: data.license_plate,
+      category_id: data.category_id,
+      description: data.description,
+    });
+  };
 
   return (
     <div className="p-typeCoach">
@@ -160,7 +196,7 @@ export default function Coach() {
         <Modal
           scrollableBody={true}
           title="Tạo xe mới"
-          visible={valuse.open}
+          open={values.open}
           onCancel={handleClose}
           maskClosable={false}
           footer={[
@@ -177,6 +213,13 @@ export default function Coach() {
             layout="vertical"
             id="formCoach"
             onFinish={onFinish}
+            initialValues={{
+              images: "",
+              name: "",
+              license_plate: "",
+              category_id: dataTypeCoach[0]?._id,
+              description: "",
+            }}
           >
             <Form.Item
               label="Biển số xe"
@@ -214,68 +257,21 @@ export default function Coach() {
             >
               <Input placeholder="Vui lòng nhập hình ảnh xe!" />
             </Form.Item>
-            {/* <Form.Item
-              label="trạng thái"
-              name="status"
-              rules={[
-                {
-                  required: true,
-                  message: "Nhập hình ảnh xe!",
-                },
-              ]}
-            >
-              <Input placeholder="Vui lòng nhập hình ảnh xe!" />
-            </Form.Item> */}
             <Form.Item
               label="Loại xe"
               name="category_id"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập lọn xe",
-                },
-              ]}
             >
-              <Input placeholder="Nhập loại xe" />
-            </Form.Item>
-            <Form.Item label="Loại xe">
-              <Select
-                onChange={onChange}
-                name="categoryqqq"
-                placeholder="Please select a category"
-              >
-                <Option value="Fruit">Fruit</Option>
-                <Option value="Vegetable">Vegetable</Option>
-                <Option value="Poultry">Poultry</Option>
+              <Select>
+                {dataTypeCoach &&
+                  dataTypeCoach.map((ele) => (
+                    <Option values={ele?._id} key={ele?._id}>
+                      {ele?.name}
+                    </Option>
+                  ))}
               </Select>
-            </Form.Item>
-            <Form.Item label="Tuyến vận chuyển">
-              <Select
-                showSearch
-                onSearch={onSearch}
-                onChange={onChange}
-                name="categoryqq"
-                placeholder="Please select a category"
-              >
-                <Option value="Fruit">Fruit</Option>
-                <Option value="Vegetable">Vegetable</Option>
-                <Option value="Poultry">Poultry</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-              label="Số ghế"
-              name="number_of_seats"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập số ghế!",
-                },
-              ]}
-            >
-              <InputNumber placeholder="Nhập số ghế" />
             </Form.Item>
             <Form.Item label="Mô tả" name="description">
-              <TextArea placeholder="Nhập mô tả!" rows={10} />
+              <TextArea placeholder="Nhập mô tả!" />
             </Form.Item>
           </Form>
         </Modal>
