@@ -22,6 +22,11 @@ export default function TypeCoach() {
     idUpdate: "",
   });
 
+  const type = {
+    bunk: "Giường nằm",
+    seat: "Ghế ngồi",
+  }
+
   const [form] = Form.useForm();
 
   const { Title } = Typography;
@@ -42,6 +47,7 @@ export default function TypeCoach() {
     fetchSeatSchema,
     refetchSeatSchema,
   ] = useFetch({}, SeatSchemaApi.getAllSeatSchema);
+
 
   useEffect(() => {
     //call api lấy data typecoach
@@ -67,11 +73,19 @@ export default function TypeCoach() {
       title: "Sơ đồ ghế",
       dataIndex: "seat_diagram",
       key: "seat_diagram",
+      render: (index) => {
+        const b = dataSeatSchema.find(ele => ele.id === index)
+        return <span>{b?.name}</span>
+      }
     },
     {
       title: "Loại ghế",
       dataIndex: "seat_diagram",
       key: "seat_diagram",
+      render: (index) => {
+        const b = dataSeatSchema.find(ele => ele.id === index)
+        return <span>{type[b?.type]}</span>
+      }
     },
     {
       title: "Số ghế ngồi",

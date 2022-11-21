@@ -38,6 +38,7 @@ export default function News() {
     {
       title: "STT",
       dataIndex: "_id",
+      width: 80,
       render: (index) => (
         <span>{(index = data.findIndex((x) => x._id === index) + 1)}</span>
       ),
@@ -46,10 +47,13 @@ export default function News() {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title",
+      width: 120,
+      ellipsis: true,
     },
     {
       title: "Thumbnail",
       dataIndex: "thumbnail",
+      width: 150,
       key: "thumbnail",
       render: (index) => {
         return (
@@ -64,21 +68,28 @@ export default function News() {
       title: "Ngày đăng",
       dataIndex: "createdAt",
       key: "createdAt",
+      width: 120,
+      ellipsis: true,
     },
     {
       title: "Nội dung",
       dataIndex: "subtitle",
       key: "subtitle",
+      width: 250,
+      ellipsis: true,
     },
     {
       title: "Slug",
       dataIndex: "slug",
       key: "slug",
+      width: 150,
+      ellipsis: true,
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
+      width: 150,
       render: (index) => {
         return index ? "Hiện" : "Ẩn";
       },
@@ -87,9 +98,11 @@ export default function News() {
       title: "Order",
       dataIndex: "order",
       key: "order",
+      width: 100,
     },
     {
-      title: '',
+      title: "",
+      width: 300,
       render: (record) => (
         <div className="p-news_table_button">
           <Button
@@ -115,7 +128,7 @@ export default function News() {
 
   // HandleDelete
   const handleDelete = (record) => {
-    console.log(record)
+    console.log(record);
     newsApi
       .deleteNew(record._id)
       .then((res) => {
@@ -190,7 +203,7 @@ export default function News() {
         })
         .catch((err) => {
           console.log(data);
-          console.log('qq',values.idUpdate);
+          console.log("qq", values.idUpdate);
 
           notification.open({
             message: "Cập nhật thất bại",
@@ -232,10 +245,12 @@ export default function News() {
           dataSource={data}
           pagination={tableParams.pagination}
           handleTableChange={handleTableChange}
+          scroll={{ x: 500 }}
         />
       </div>
       <div className="p-news_modal">
         <Modal
+          bodyStyle={{ overflowY: "scroll", height: "90vh" }}
           title={values.idUpdate ? "Cập nhật tin tức" : "Thêm tin tức mới"}
           visible={values.open}
           onCancel={handleClose}

@@ -3,7 +3,7 @@ import queryString from "query-string";
 
 const axiosClient = axios.create({
   //   baseURL: process.env.REACT_APP_API_URL,
-  baseURL: "https://api-supper-bus-booking.herokuapp.com/v1",
+  baseURL: "https://th-buslines.onrender.com/v1",
   headers: {
     "content-type": "application/json",
   },

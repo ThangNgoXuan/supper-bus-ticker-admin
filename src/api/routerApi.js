@@ -19,7 +19,7 @@ const routerApi = {
   },
   updateRoute: (data, id) => {
     const url = `/route/${id}`;
-    return axiosClient.post(url, data);
+    return axiosClient.put(url, data);
   },
 };
 

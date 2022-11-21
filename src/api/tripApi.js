@@ -8,6 +8,10 @@ const TripApi = {
     createTrip: (data) => {
         const url = "/trip"
         return axiosClient.post(url, data)
+    },
+    updateTrip: (id,data) => {
+        const url = `trip/${id}`
+        return axiosClient.put(url, data)
     }
 }
 
