@@ -40,6 +40,9 @@ export default function Coach() {
     refetchTypeCoach,
   ] = useFetch({}, TypeCoachApi.getAllTypeCoach);
 
+  console.log(data)
+
+
   useEffect(() => {
     fetch({}, true);
     fetchTypeCoach({}, true);

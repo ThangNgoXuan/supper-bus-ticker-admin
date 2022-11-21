@@ -35,9 +35,14 @@
 }
 
 
+// .ant-modal-wrap {
+//     overflow-y: hidden !important;
+// }
+
 .ant-layout-content {
     background-color: #f4f7fe;
     padding: rem(30) rem(32);
+    
 }
 
 .ant-notification-notice-message {
@@ -49,4 +54,8 @@
 }
 .ant-modal-title {
     font-weight: 600 !important;
+}
+
+.ant-btn {
+    border-radius: rem(8) !important;
 }

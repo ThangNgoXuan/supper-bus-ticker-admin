@@ -48,6 +48,7 @@ export default function TypeCoach() {
     refetchSeatSchema,
   ] = useFetch({}, SeatSchemaApi.getAllSeatSchema);
 
+
   useEffect(() => {
     //call api lấy data typecoach
     fetch({}, true);
