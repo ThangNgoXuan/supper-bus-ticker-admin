@@ -61,34 +61,40 @@ export default function Trips() {
     {
       title: "STT",
       dataIndex: "_id",
+      width: 80,
       render: (index) => (
         <span>{(index = dataTrip.findIndex((x) => x._id === index) + 1)}</span>
       ),
     },
     {
+      width: 200,
       title: "Mã chuyến xe",
       dataIndex: "id",
       key: "id",
     },
     {
+      width: 200,
       title: "Tuyến đường",
       dataIndex: "route",
       key: "route",
       render: (index) => <span>{index?.name}</span>,
     },
     {
+      width: 200,
       title: "Xe",
       dataIndex: "vehicle",
       key: "vehicle",
       render: (index) => <span>{index?.name}</span>,
     },
     {
+      width: 250,
       title: "Xuất bến",
       dataIndex: "accept_start",
       key: "accept_start",
       render: (index) => <span>{index ? "Đã xuất bến" : "Chưa xuất bến"}</span>,
     },
     {
+      width: 600,
       title: "Thời gian khởi hành",
       dataIndex: "start",
       key: "start",
@@ -98,21 +104,25 @@ export default function Trips() {
       ),
     },
     {
+      width: 250,
       title: "Tài xế",
       dataIndex: "start",
       key: "start",
     },
     {
+      width: 250,
       title: "Phụ xe",
       dataIndex: "start",
       key: "start",
     },
     {
+      width: 250,
       title: "Giá vé",
       dataIndex: "price",
       key: "price",
     },
     {
+      width: 300,
       title: "",
       render: (record) => (
         <div className="p-recruit_table_button">
@@ -197,6 +207,7 @@ export default function Trips() {
           columns={columnsTrip}
           dataSource={dataTrip}
           loading={loadingTrip}
+          scroll={{ x: 1500 }}
         ></Table>
       </div>
       <Modal
