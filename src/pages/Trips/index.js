@@ -1,10 +1,10 @@
 import { PlusOutlined } from "@ant-design/icons";
+
 import {
   Button,
   Col,
   DatePicker,
   Form,
-  Input,
   InputNumber,
   Modal,
   notification,
@@ -57,38 +57,52 @@ export default function Trips() {
     /* eslint-disable-next-line */
   }, []);
 
+  console.log("trip", dataTrip);
+  console.log("route", dataRoute);
+
+  // function addHours(numOfHours, date = new Date()) {
+  //   date.setTime(date.getTime() + numOfHours * 60 * 60 * 1000);
+  //   return date;
+  // }
+
   const columnsTrip = [
     {
       title: "STT",
       dataIndex: "_id",
+      width: 80,
       render: (index) => (
         <span>{(index = dataTrip.findIndex((x) => x._id === index) + 1)}</span>
       ),
     },
     {
+      width: 200,
       title: "Mã chuyến xe",
-      dataIndex: "id",
-      key: "id",
+      dataIndex: "code",
+      key: "code",
     },
     {
+      width: 200,
       title: "Tuyến đường",
       dataIndex: "route",
       key: "route",
       render: (index) => <span>{index?.name}</span>,
     },
     {
+      width: 200,
       title: "Xe",
       dataIndex: "vehicle",
       key: "vehicle",
       render: (index) => <span>{index?.name}</span>,
     },
     {
+      width: 250,
       title: "Xuất bến",
       dataIndex: "accept_start",
       key: "accept_start",
       render: (index) => <span>{index ? "Đã xuất bến" : "Chưa xuất bến"}</span>,
     },
     {
+      width: 600,
       title: "Thời gian khởi hành",
       dataIndex: "start",
       key: "start",
@@ -98,26 +112,47 @@ export default function Trips() {
       ),
     },
     {
+      width: 600,
+      title: "Thời gian kết thúc",
+      dataIndex: "end",
+      key: "end",
+      render: (index) => (
+        // <span>{index.intend_time}</span>
+        <span>{moment(index.intend_time).format("HH:mm DD-MM-YYYY")}</span>
+      ),
+    },
+    {
+      width: 250,
       title: "Tài xế",
       dataIndex: "start",
       key: "start",
     },
     {
+      width: 250,
       title: "Phụ xe",
       dataIndex: "start",
       key: "start",
     },
     {
+      width: 250,
       title: "Giá vé",
       dataIndex: "price",
-      key: "price",
+      render: (index) => {
+        return <span>{index} VNĐ</span>;
+      },
     },
     {
+      width: 300,
       title: "",
       render: (record) => (
         <div className="p-recruit_table_button">
           <Button type="primary">Xuất bến</Button>
-          <Button type="primary" onClick={() => handleOpenUpdate(record)}>
+          <Button
+            type="primary"
+            onClick={() => {
+              handleOpenUpdate(record);
+            }}
+          >
             Cập nhật
           </Button>
         </div>
@@ -141,29 +176,57 @@ export default function Trips() {
   };
 
   const handleOpenUpdate = (data) => {
-    console.log("Qq", data);
+    console.log('cap nhat',moment(data.start.intend_time));
     setValues({
       open: true,
       idUpdate: data._id,
     });
+    // const t = moment(data?.start?.intend_time).format(dateFormat);
+    console.log('datA',  moment(new Date(), dateFormat))
 
     form.setFieldsValue({
-      route: data.route,
-      vehicle: data.vehicle,
+      route: data.route._id,
+      vehicle: data.vehicle._id,
       price: data.price,
       accept_start: data.accept_start,
-      id: data.id,
-      // start: data.start.intend_time,
+      start: moment(data.start.intend_time),
     });
   };
 
   const handleSubmit = (data) => {
     console.log("create", data);
     if (values.idUpdate) {
+      console.log(data);
+      data.start = { intend_time: data.start };
+      const xu = dataVehicle.filter((x) => x._id === data.vehicle);
+      data.seat_diagram = xu[0].category_id.seat_diagram;
+      const yu = dataRoute.filter((x) => x._id === data.route);
+      const bu = data.start.intend_time;
+      data.end = {
+        intend_time: moment(bu).add(Math.round(yu[0].duration / 60), "hours"),
+      };
+      TripApi.updateTrip(values.idUpdate,data)
+        .then((res) => {
+          refetchTrip();
+          notification.open({
+            message: "Cập nhật thành công",
+          });
+          form.resetFields();
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Cập nhật thất bại",
+          });
+        });
     } else {
       data.start = { intend_time: data.start };
-      data.seat_diagram = "n_bunk_34";
-      data.end = { intend_time: new Date() };
+      const x = dataVehicle.filter((x) => x._id === data.vehicle);
+      data.seat_diagram = x[0].category_id.seat_diagram;
+      const y = dataRoute.filter((x) => x._id === data.route);
+      const b = data.start.intend_time;
+      data.end = {
+        intend_time: moment(b).add(Math.round(y[0].duration / 60), "hours"),
+      };
       TripApi.createTrip(data)
         .then((res) => {
           refetchTrip();
@@ -197,6 +260,7 @@ export default function Trips() {
           columns={columnsTrip}
           dataSource={dataTrip}
           loading={loadingTrip}
+          scroll={{ x: 1500 }}
         ></Table>
       </div>
       <Modal
@@ -232,7 +296,6 @@ export default function Trips() {
             price: 0,
             accept_start: false,
             start: moment(new Date(), dateFormat),
-            id: ""
           }}
         >
           <Form.Item label="Chọn tuyến xe" name="route">
@@ -244,18 +307,6 @@ export default function Trips() {
                   </Option>
                 ))}
             </Select>
-          </Form.Item>
-          <Form.Item
-            label="Mã chuyến"
-            name="id"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập mã chuyến",
-              },
-            ]}
-          >
-            <Input placeholder="Nhập mã chuyến" />
           </Form.Item>
           <Row>
             <Col span={10}>

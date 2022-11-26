@@ -9,7 +9,6 @@ import "./App.scss";
 import Dashboard from "./pages/Dashboard";
 import Ticket from "./pages/Ticket";
 import Coach from "./pages/Coach";
-import Driver from "./pages/Driver";
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
 import News from "./pages/News";
@@ -24,6 +23,7 @@ import Schema from "./pages/Schema";
 import TypeCoach from "./pages/TypeCoach";
 import TripPlan from "./pages/TripPlan";
 import Trips from "./pages/Trips";
+import Employee from "./pages/Employee";
 
 export default function MainLayout() {
   const { Content } = Layout;
@@ -39,7 +39,7 @@ export default function MainLayout() {
             <Route exact path="/ticker" element={<Ticket />} />
             <Route exact path="/coach" element={<Coach />} />
             <Route exact path="/coach-type" element={<Coach />} />
-            <Route exact path="/driver" element={<Driver />} />
+            <Route exact path="/employee" element={<Employee />} />
             <Route exact path="/contact" element={<ContactUs />} />
             <Route exact path="/about" element={<AboutUs />} />
             <Route exact path="/news" element={<News />} />

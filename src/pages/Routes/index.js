@@ -468,6 +468,7 @@ export default function Routes() {
             pagination={false}
             columns={columnsPlan}
             dataSource={values.listPoint}
+            scroll={{ x: 500 }}
           />
         </Modal>
       </div>

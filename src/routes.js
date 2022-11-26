@@ -6,11 +6,8 @@ import {
 } from "@ant-design/icons";
 
 import { IoTicketOutline } from "react-icons/io5";
-import { RiContactsBook2Line } from "react-icons/ri";
 import {
-  AiOutlineInfoCircle,
   AiOutlineUser,
-  AiOutlineSchedule,
 } from "react-icons/ai";
 import { BiNews } from "react-icons/bi";
 import { GiMassDriver } from "react-icons/gi";
@@ -79,7 +76,7 @@ const dashboardRoutes = [
     icon: <SiTripdotcom />,
   },
   {
-    path: "/driver",
+    path: "/employee",
     name: "Quản lí nhân viên",
     icon: <GiMassDriver />,
   },
@@ -98,16 +95,16 @@ const dashboardRoutes = [
     name: "Tuyển dụng",
     icon: <ReconciliationOutlined />,
   },
-  {
-    path: "/contact",
-    name: "Liên hệ",
-    icon: <RiContactsBook2Line />,
-  },
-  {
-    path: "/about",
-    name: "Về chúng tôi",
-    icon: <AiOutlineInfoCircle />,
-  },
+  // {
+  //   path: "/contact",
+  //   name: "Liên hệ",
+  //   icon: <RiContactsBook2Line />,
+  // },
+  // {
+  //   path: "/about",
+  //   name: "Về chúng tôi",
+  //   icon: <AiOutlineInfoCircle />,
+  // },
 ];
 
 export default dashboardRoutes;
