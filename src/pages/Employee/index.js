@@ -12,23 +12,22 @@ import {
 } from "antd";
 import React from "react";
 import { useEffect } from "react";
-import CoachApi from "../../api/coachApi";
 import TypeCoachApi from "../../api/typeCoach";
 import useFetch from "../../hooks/useFetch";
 import useValues from "../../hooks/useValues";
+import userApi from "../../api/userApi";
 
-export default function Coach() {
+export default function Employee() {
   const { Title } = Typography;
   const [values, setValues] = useValues({
     open: false,
     idUpdate: "",
   });
 
-  const { TextArea } = Input;
   const [form] = Form.useForm();
   const { Option } = Select;
   /* eslint-disable-next-line */
-  const [loading, data, _, fetch, refetch] = useFetch({}, CoachApi.getAllCoach);
+  const [loading, data, _, fetch, refetch] = useFetch({}, userApi.getAll);
   const [
     /* eslint-disable-next-line */
     loadingTypeCoach,
@@ -46,58 +45,79 @@ export default function Coach() {
     /* eslint-disable-next-line */
   }, []);
 
+  const dataRole = [
+    {
+      key: "driver",
+      value: "Tài xế",
+    },
+    {
+      key: "employee",
+      value: "Nhân viên",
+    },
+  ];
+
   const columns = [
     {
       title: "STT",
       dataIndex: "_id",
+      key: "_id",
       render: (index) => (
-        <span>{(index = data.findIndex((x) => x._id === index) + 1)}</span>
+        <span>
+          {(index = data?.users.findIndex((x) => x._id === index) + 1)}
+        </span>
       ),
     },
     {
-      title: "Biển số xe",
-      dataIndex: "license_plate",
-      key: "license_plate",
+      title: "Avatar",
+      dataIndex: "avatar",
+      key: "avatar",
+      render: (index) => {
+        return (
+          <Image
+            src={index || "https://picsum.photos/50"}
+            style={{ height: "50px" }}
+          />
+        );
+      },
     },
     {
-      title: "Hình ảnh",
-      dataIndex: "image",
-      // key: "image",
-      render: () => (
-        <Image
-          src="https://picsum.photos/20"
-          style={{
-            width: "50px",
-            height: "50px",
-          }}
-        />
-      ),
+      title: "Họ",
+      dataIndex: "lastName",
+      key: "lastName",
     },
     {
-      title: "Tên xe",
-      dataIndex: "name",
-      key: "name",
+      title: "Tên",
+      dataIndex: "firstName",
+      key: "firstName",
     },
     {
-      title: "Loại xe",
-      dataIndex: "category_id",
-      render: (index) => (
-        <span>{index?.name}</span>
-      ),
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    // {
+    //   title: "Mật khẩu",
+    //   dataIndex: "password",
+    //   key: "password",
+    // },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
     },
     {
-      title: "Mô tả",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      dataIndex: "",
+      title: "",
       render: (record) => (
         <div className="p-news_table_button">
-          <Button type="primary" onClick={() => handleDelete(record)}>
+          <Button type="primary" onClick={handleDelete}>
             Xóa
           </Button>
-          <Button type="primary" onClick={() => handleOpenUpdate(record)}>
+          <Button
+            type="primary"
+            onClick={() => {
+              handleOpenUpdate(record);
+            }}
+          >
             Cập nhật
           </Button>
         </div>
@@ -107,7 +127,8 @@ export default function Coach() {
 
   const handleDelete = (record) => {
     console.log("id", record._id);
-    CoachApi.deleteCoach(record._id)
+    userApi
+      .deteteEmployee(record._id)
       .then((res) => {
         refetch();
         notification.open({
@@ -115,7 +136,7 @@ export default function Coach() {
         });
       })
       .catch((err) => {
-        console.log("qqq",err);
+        console.log("qqq", err);
         notification.open({
           message: "Xóa thất bại!",
         });
@@ -138,7 +159,8 @@ export default function Coach() {
 
   const onFinish = (data) => {
     if (values.idUpdate) {
-      CoachApi.updateCoach(data, values.idUpdate)
+      userApi
+        .updateEmployee(data, values.idUpdate)
         .then((res) => {
           refetch();
           notification.open({
@@ -151,8 +173,8 @@ export default function Coach() {
           });
         });
     } else {
-      data.number_of_seats = 50;
-      CoachApi.createCoach(data)
+      userApi
+        .createEmployee(data)
         .then((res) => {
           refetch();
           notification.open({
@@ -169,16 +191,18 @@ export default function Coach() {
   };
 
   const handleOpenUpdate = (data) => {
+    console.log("data", data);
     setValues({
       open: true,
       idUpdate: data._id,
     });
+
     form.setFieldsValue({
-      images: data.images,
-      name: data.name,
-      license_plate: data.license_plate,
-      category_id: data.category_id,
-      description: data.description,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      role: data.role,
+      password: data.password,
     });
   };
 
@@ -192,7 +216,7 @@ export default function Coach() {
             Tạo mới
           </Button>
         </div>
-        <Table dataSource={data} columns={columns} loading={loading} />
+        <Table dataSource={data?.users} columns={columns} loading={loading} />
       </div>
       <div className="p-coach_modal">
         <Modal
@@ -203,9 +227,18 @@ export default function Coach() {
           maskClosable={false}
           footer={[
             <>
-              <Button onClick={handleClose}>Hủy</Button>
-              <Button htmlType="submit" form="formCoach">
-                Tạo
+              <Button
+                onClick={handleClose}
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+              >
+                Hủy
+              </Button>
+              <Button
+                htmlType="submit"
+                form="formCoach"
+                style={{ backgroundColor: "#001c6b", color: "white" }}
+              >
+                {values.idUpdate ? "Cập nhật" : "Tạo"}
               </Button>
             </>,
           ]}
@@ -216,64 +249,70 @@ export default function Coach() {
             id="formCoach"
             onFinish={onFinish}
             initialValues={{
-              images: "",
-              name: "",
-              license_plate: "",
-              category_id: dataTypeCoach[0]?._id,
-              description: "",
+              firstName: "",
+              lastName: "",
+              email: "",
+              role: dataRole[0].key,
+              password: "",
             }}
           >
             <Form.Item
-              label="Biển số xe"
-              name="license_plate"
+              label="Tên"
+              name="firstName"
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng nhập biển số xe!",
+                  message: "Vui lòng nhập Tên",
                 },
               ]}
             >
-              <Input placeholder="Vui lòng nhập biển số xe" />
+              <Input placeholder="Nhập tên" />
             </Form.Item>
             <Form.Item
-              label="Tên xe"
-              name="name"
+              label="Họ"
+              name="lastName"
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng nhập tên xe!",
+                  message: "Vui lòng nhập Họ",
                 },
               ]}
             >
-              <Input placeholder="Vui lòng nhập biển tên xe" />
+              <Input placeholder="Nhập Họ" />
             </Form.Item>
             <Form.Item
-              label="Hình ảnh"
-              name="images"
+              label="Email"
+              name="email"
               rules={[
                 {
                   required: true,
-                  message: "Nhập hình ảnh xe!",
+                  message: "Vui lòng nhập email",
                 },
               ]}
             >
-              <Input placeholder="Vui lòng nhập hình ảnh xe!" />
+              <Input placeholder="Nhập email" />
             </Form.Item>
             <Form.Item
-              label="Loại xe"
-              name="category_id"
+              label="Mật khẩu"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập mật khẩu",
+                },
+              ]}
             >
+              <Input placeholder="Nhập mật khẩu" />
+            </Form.Item>
+            <Form.Item label="Role" name="role">
               <Select>
-                {dataTypeCoach &&
-                  dataTypeCoach.map((ele) => (
-                    <Option values={ele?._id} key={ele?._id}>
-                      {ele?.name}
+                {dataRole &&
+                  dataRole.map((ele) => (
+                    <Option values={ele.key} key={ele.key}>
+                      {ele.value}
                     </Option>
                   ))}
               </Select>
-            </Form.Item>
-            <Form.Item label="Mô tả" name="description">
-              <TextArea placeholder="Nhập mô tả!" />
             </Form.Item>
           </Form>
         </Modal>

@@ -5,6 +5,7 @@ import {
   Input,
   Modal,
   notification,
+  Select,
   Table,
   Typography,
 } from "antd";
@@ -23,6 +24,19 @@ export default function Place() {
     setOpen: false,
     idUpdate: "",
   });
+
+  const { Option } = Select;
+
+  const dataType = [
+    {
+      key: "point",
+      value: "Điểm chính",
+    },
+    {
+      key: "sub_point",
+      value: "Điểm phụ",
+    },
+  ];
 
   /* eslint-disable-next-line */
   const [loading, data, _, fetch, refetch] = useFetch(
@@ -53,6 +67,14 @@ export default function Place() {
       title: "Địa chỉ",
       dataIndex: "address",
       key: "address",
+    },
+    {
+      title: "Loại địa điểm",
+      dataIndex: "type",
+      render: (index) => {
+        let b = dataType.filter((item) => item.key === index);
+        return b[0]?.value;
+      },
     },
     {
       title: "Kinh độ",
@@ -159,9 +181,9 @@ export default function Place() {
     form.setFieldsValue({
       name: record.name,
       address: record.address,
-      phone: record.phone,
       longtitude: record.longtitude,
       latitude: record.latitude,
+      phone: record.type,
     });
     setValues({
       open: true,
@@ -236,6 +258,16 @@ export default function Place() {
               ]}
             >
               <Input placeholder="Nhập địa chỉ" />
+            </Form.Item>
+            <Form.Item label="Loại địa điểm" name="type">
+              <Select>
+                {dataType &&
+                  dataType.map((ele) => (
+                    <Option values={ele.key} key={ele.key}>
+                      {ele.value}
+                    </Option>
+                  ))}
+              </Select>
             </Form.Item>
             <Form.Item
               label="Kinh độ"
